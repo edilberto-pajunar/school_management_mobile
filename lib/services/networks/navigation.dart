@@ -30,7 +30,7 @@ class NavigationServices {
     Navigator.of(context).push(createRoute(screen, fromBottom));
   }
 
-  void popScreen(BuildContext context) {
+  void pop(BuildContext context) {
     Navigator.pop(context);
   }
 

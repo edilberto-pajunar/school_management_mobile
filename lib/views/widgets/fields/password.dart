@@ -1,33 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/values/strings/colors.dart';
+import 'package:school_management/values/strings/images.dart';
 
-class PrimaryTextField extends StatelessWidget {
-  const PrimaryTextField({
+class PasswordTextField extends StatefulWidget {
+  const PasswordTextField({
     this.fieldKey,
     required this.controller,
-    this.hintText,
+    required this.hintText,
     required this.label,
-    this.textInput = TextInputType.name,
     this.validator,
     this.onChanged,
-    this.prefixText,
-    this.readOnly = false,
-    this.onTap,
     super.key,
 
   });
 
   final GlobalKey<FormFieldState>? fieldKey;
   final TextEditingController controller;
-  final String? hintText;
+  final String hintText;
   final String label;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
-  final TextInputType textInput;
-  final String? prefixText;
-  final bool readOnly;
-  final Function()? onTap;
 
+  @override
+  State<PasswordTextField> createState() => _PasswordTextFieldState();
+}
+
+class _PasswordTextFieldState extends State<PasswordTextField> {
+
+  bool showPass = true;
+
+  void togglePassword() {
+    setState(() {
+      showPass = !showPass;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,30 +44,19 @@ class PrimaryTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(height: 12.0),
-        Text(label),
+        Text(widget.label),
         const SizedBox(height: 4.0),
         TextFormField(
-          key: fieldKey,
-          onTapOutside: (PointerDownEvent event) {
-            FocusScope.of(context).unfocus();
-          },
+          key: widget.fieldKey,
+          onTapOutside: (PointerDownEvent event) => FocusScope.of(context).unfocus(),
+          controller: widget.controller,
           style: theme.textTheme.bodyMedium!,
-          keyboardType: textInput,
-          controller: controller,
-          readOnly: readOnly,
-          onTap: onTap,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12.0, vertical: 12.0,),
-            prefixText: prefixText,
-            prefixStyle: TextStyle(
-              color: ColorTheme.primaryBlack,
-              fontWeight: FontWeight.bold,
-            ),
-            hintText: hintText,
+            hintText: widget.hintText,
             hintStyle: theme.textTheme.bodyMedium!.copyWith(
-              color: ColorTheme.primaryRed.withOpacity(0.25)
+                color: ColorTheme.primaryRed.withOpacity(0.25)
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.0),
@@ -69,9 +64,19 @@ class PrimaryTextField extends StatelessWidget {
                 color: ColorTheme.primaryBlack,
               ),
             ),
+            suffixIcon: IconButton(
+              onPressed: togglePassword,
+              icon: Image.asset(
+                showPass
+                  ? PngImages.showPass
+                  : PngImages.hidePass,
+                height: 30,
+              ),
+            ),
           ),
-          validator: validator,
-          onChanged: (value) => fieldKey!.currentState!.validate(),
+          obscureText: showPass,
+          validator: widget.validator,
+          onChanged: (value) => widget.fieldKey!.currentState!.validate(),
         ),
       ],
     );
