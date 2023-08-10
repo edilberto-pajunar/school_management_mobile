@@ -2,7 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_management/services/auth/auth.dart';
-import 'package:school_management/views/screens/home.dart';
+import 'package:school_management/values/theme.dart';
+import 'package:school_management/views/screens/auth/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +22,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => Auth()),
       ],
-      child: const MaterialApp(
-        home: HomeScreen(),
+      child: MaterialApp(
+        theme: CustomTheme.themeData,
+        home: const HomeScreen(),
       ),
     );
   }

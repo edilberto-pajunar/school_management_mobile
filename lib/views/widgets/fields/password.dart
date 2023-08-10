@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:school_management/values/strings/colors.dart';
+import 'package:school_management/values/strings/images.dart';
 
-class PrimaryTextField extends StatelessWidget {
-  const PrimaryTextField({
+class PasswordTextField extends StatefulWidget {
+  const PasswordTextField({
     this.fieldKey,
     required this.controller,
     required this.hintText,
@@ -21,6 +22,20 @@ class PrimaryTextField extends StatelessWidget {
   final Function(String)? onChanged;
 
   @override
+  State<PasswordTextField> createState() => _PasswordTextFieldState();
+}
+
+class _PasswordTextFieldState extends State<PasswordTextField> {
+
+  bool showPass = true;
+
+  void togglePassword() {
+    setState(() {
+      showPass = !showPass;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final ThemeData theme = Theme.of(context);
@@ -29,16 +44,16 @@ class PrimaryTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(label),
+        Text(widget.label),
         const SizedBox(height: 4.0),
         TextFormField(
-          key: fieldKey,
+          key: widget.fieldKey,
           onTapOutside: (PointerDownEvent event) => FocusScope.of(context).unfocus(),
-          controller: controller,
+          controller: widget.controller,
           decoration: InputDecoration(
-            hintText: hintText,
+            hintText: widget.hintText,
             hintStyle: theme.textTheme.bodyMedium!.copyWith(
-              color: ColorTheme.primaryRed.withOpacity(0.25)
+                color: ColorTheme.primaryRed.withOpacity(0.25)
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.0),
@@ -46,9 +61,19 @@ class PrimaryTextField extends StatelessWidget {
                 color: ColorTheme.primaryBlack,
               ),
             ),
+            suffixIcon: IconButton(
+              onPressed: togglePassword,
+              icon: Image.asset(
+                showPass
+                  ? PngImages.showPass
+                  : PngImages.hidePass,
+                height: 30,
+              ),
+            ),
           ),
-          validator: validator,
-          onChanged: (value) => fieldKey!.currentState!.validate(),
+          obscureText: showPass,
+          validator: widget.validator,
+          onChanged: (value) => widget.fieldKey!.currentState!.validate(),
         ),
       ],
     );
