@@ -7,7 +7,7 @@ class CustomTypography {
 
     /// Rarely used but important for headlines
     headlineLarge: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 32.0,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.30,
@@ -15,14 +15,14 @@ class CustomTypography {
 
     /// Default for headlines
     headlineMedium: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 28.0,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.30,
     ),
 
     headlineSmall: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 24.0,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.30,
@@ -32,7 +32,7 @@ class CustomTypography {
 
     /// Used for more emphasis on top page text
     titleLarge: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 24.0,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.30,
@@ -40,14 +40,14 @@ class CustomTypography {
 
     /// Default for top page text
     titleMedium: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 20.0,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.30,
     ),
 
     titleSmall: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 18.0,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.30,
@@ -56,7 +56,7 @@ class CustomTypography {
     /// BODY
 
     bodyLarge: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 16.0,
       fontWeight: FontWeight.w400,
       letterSpacing: -0.30,
@@ -64,7 +64,7 @@ class CustomTypography {
 
     /// Default for regular text
     bodyMedium: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 14.0,
       fontWeight: FontWeight.w400,
       letterSpacing: -0.30,
@@ -72,7 +72,7 @@ class CustomTypography {
 
     /// Default for captions
     bodySmall: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 12.0,
       fontWeight: FontWeight.w500,
       letterSpacing: -0.30,
@@ -82,21 +82,21 @@ class CustomTypography {
 
     /// Default for buttons
     labelLarge: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 16.0,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.30,
     ),
 
     labelMedium: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 14.0,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.30,
     ),
 
     labelSmall: TextStyle(
-      fontFamily: "PlayfairDisplay",
+      // fontFamily: "PlayfairDisplay",
       fontSize: 12.0,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.30,

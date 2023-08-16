@@ -51,9 +51,9 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 12.0),
                     PrimaryTextField(
                       fieldKey: Auth.emailKey,
-                      label: "Email",
+                      label: "Control Number",
                       controller: Auth.email,
-                      hintText: "Email",
+                      hintText: "Control Number",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "This field is required";

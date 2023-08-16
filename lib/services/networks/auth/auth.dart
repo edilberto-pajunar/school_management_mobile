@@ -1,12 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:school_management/services/networks/navigation.dart';
 import 'package:school_management/views/screens/instructor/home.dart';
+import 'package:school_management/views/screens/student/home.dart';
 
 class Auth extends ChangeNotifier {
 
   FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore db = FirebaseFirestore.instance;
   final NavigationServices nav = NavigationServices();
 
   bool isLoading = false;
@@ -36,7 +39,7 @@ class Auth extends ChangeNotifier {
     showHUD(true);
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
-        email: email.text,
+        email: "${email.text}@gmail.com",
         password: password.text,
       );
 
@@ -57,10 +60,20 @@ class Auth extends ChangeNotifier {
           nav.pushScreen(context,
             screen: const InstructorHomeScreen(),
           );
+        } else if (author == "Student") {
+          nav.pushScreen(context,
+            screen: const PersonalHomeScreen(),
+          );
         }
       }
       return value;
     });
     notifyListeners();
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await auth.signOut().then((value) {
+      nav.popAll(context);
+    });
   }
 }

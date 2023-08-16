@@ -2,10 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_management/firebase_options.dart';
+import 'package:school_management/models/student/profile.dart';
+import 'package:school_management/services/networks/auth/auth.dart';
+import 'package:school_management/services/networks/student/db.dart';
 import 'package:school_management/values/theme.dart';
 import 'package:school_management/views/screens/auth/home.dart';
-
-import 'services/networks/auth/auth.dart';
 import 'services/networks/registration/application.dart';
 
 void main() async {
@@ -25,8 +26,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => Auth()),
         ChangeNotifierProvider(create: (context) => Application()),
+        ChangeNotifierProvider(create: (context) => Auth()),
+        ChangeNotifierProvider(create: (context) => ProfileServices()),
+        ChangeNotifierProvider(create: (context) => StudentDB()),
       ],
       child: MaterialApp(
         theme: CustomTheme.themeData,

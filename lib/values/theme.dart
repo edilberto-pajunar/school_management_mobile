@@ -26,6 +26,6 @@ class CustomTheme {
     //   ),
     // ),
     textTheme: CustomTypography.theme,
-    fontFamily: "PlayfairDisplay",
+    // fontFamily: "PlayfairDisplay",
   );
 }

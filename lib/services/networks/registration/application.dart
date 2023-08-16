@@ -382,7 +382,7 @@ class Application extends ChangeNotifier {
       );
 
       await db.collection("forms").doc().set(applicationInfo.toJson());
-      // clearForm();
+      clearForm();
       showHUD(false);
 
     } catch (e) {

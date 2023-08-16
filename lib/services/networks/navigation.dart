@@ -34,8 +34,6 @@ class NavigationServices {
     Navigator.pop(context);
   }
 
-
-
   void popAll(BuildContext context) {
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
