@@ -42,32 +42,48 @@ class Auth extends ChangeNotifier {
   UserModel? user;
 
   /// [loginAccount] will prompt the user to log in
-  Future<UserCredential?> loginAccount(BuildContext context) async {
+  Future<UserCredential?> loginAccount(BuildContext context, List<String> uids) async {
+
+    final ThemeData theme = Theme.of(context);
     showHUD(true);
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
       email: "${controlNumber.text}@gmail.com",
         password: password.text,
       ).then((UserCredential value) {
-        // Update the user model
-        user = UserModel(
-          controlNumber: controlNumber.text,
-          type: author!,
-          id: value.user!.uid,
-        );
 
-        if (author == "instructors") {
-          nav.pushScreen(context,
-            screen: const InstructorHomeScreen(),
+
+        if (uids.contains(value.user!.uid)) {
+          // Update the user model
+          user = UserModel(
+            controlNumber: controlNumber.text,
+            type: author!,
+            id: value.user!.uid,
           );
-        } else if (author == "students") {
-          nav.pushScreen(context,
-            screen: const PersonalHomeScreen(),
-          );
+
+          if (author == "instructors") {
+            nav.pushScreen(context,
+              screen: const InstructorHomeScreen(),
+            );
+          } else if (author == "students") {
+            nav.pushScreen(context,
+              screen: const PersonalHomeScreen(),
+            );
+          } else {
+            nav.pushScreen(context, screen: const AdminHomeScreen());
+          }
+          notifyListeners();
         } else {
-          nav.pushScreen(context, screen: const AdminHomeScreen());
+          showDialog(context: context, builder: (context) {
+            return AlertDialog(
+              content: Text("Wrong control number/password.",
+                style: theme.textTheme.bodyMedium!.copyWith(
+                  color: Colors.red,
+                ),
+              ),
+            );
+          });
         }
-        notifyListeners();
         return value;
       });
 
@@ -84,8 +100,33 @@ class Auth extends ChangeNotifier {
   Future<void> logout(BuildContext context) async {
     await auth.signOut().then((value) {
       nav.popAll(context);
-      controlNumber.clear();
-      password.clear();
+      clearForm();
+
     });
+  }
+
+  void clearForm() {
+    controlNumber.clear();
+    password.clear();
+    notifyListeners();
+  }
+
+  Stream<List<String>>? authListStream;
+
+  Stream<List<String>> getAuth() {
+    return db.collection(author!)
+        .snapshots()
+        .map(_authFromSnapshots);
+  }
+
+  List<String> _authFromSnapshots(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return doc.get("id") as String;
+    }).toList();
+  }
+
+  void updateAuthListStream() {
+    authListStream = getAuth();
+    notifyListeners();
   }
 }
