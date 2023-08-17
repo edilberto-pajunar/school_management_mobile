@@ -19,7 +19,9 @@ class StreamWrapper<T> extends StatelessWidget {
     return StreamBuilder<T>(
       stream: stream,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+        if ((snapshot.connectionState == ConnectionState.done
+        || snapshot.connectionState == ConnectionState.active)
+            && snapshot.hasData) {
           final T? data = snapshot.data;
           return child(data);
         } else if (snapshot.hasError) {

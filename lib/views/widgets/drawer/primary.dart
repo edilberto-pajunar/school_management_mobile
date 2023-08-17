@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:school_management/services/networks/auth/auth.dart';
 import 'package:school_management/services/networks/navigation.dart';
 import 'package:school_management/values/strings/images.dart';
 import 'package:school_management/views/screens/student/grades.dart';
@@ -12,6 +14,8 @@ class PrimaryDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final NavigationServices nav = NavigationServices();
+    final ThemeData theme = Theme.of(context);
+    final Auth auth = Provider.of<Auth>(context);
 
     return Drawer(
       child: Column(
@@ -49,6 +53,17 @@ class PrimaryDrawer extends StatelessWidget {
               nav.pushScreen(context, screen: const PersonalProfileScreen());
             },
             title: const Text("Profile"),
+          ),
+          ListTile(
+            onTap: () {
+              auth.logout(context);
+            },
+            title: Text("Logout",
+              style: theme.textTheme.bodyLarge!.copyWith(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),

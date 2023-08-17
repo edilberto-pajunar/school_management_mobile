@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
             PrimaryButton(
               label: "Instructor",
               onPressed: () {
-                auth.updateAuthor("Instructor");
+                auth.updateAuthor("instructors");
                 nav.pushScreen(context,
                   screen: const LoginScreen(),
                 );
@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
             PrimaryButton(
               label: "Student",
               onPressed: () {
-                auth.updateAuthor("Student");
+                auth.updateAuthor("students");
                 nav.pushScreen(context,
                   screen: const LoginScreen(),
                 );
@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
             PrimaryButton(
               label: "Admin",
               onPressed: () {
-                auth.updateAuthor("Admin");
+                auth.updateAuthor("admins");
                 nav.pushScreen(context,
                   screen: const LoginScreen(),
                 );

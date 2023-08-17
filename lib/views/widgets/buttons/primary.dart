@@ -24,7 +24,7 @@ class PrimaryButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        padding: const  EdgeInsets.symmetric(vertical: 16.0,),
+        padding: const  EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
         backgroundColor: backgroundColor ?? ColorTheme.primaryRed,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),

@@ -52,7 +52,7 @@ class LoginScreen extends StatelessWidget {
                     PrimaryTextField(
                       fieldKey: Auth.emailKey,
                       label: "Control Number",
-                      controller: Auth.email,
+                      controller: Auth.controlNumber,
                       hintText: "Control Number",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -80,7 +80,7 @@ class LoginScreen extends StatelessWidget {
                     PrimaryButton(
                       onPressed: () async {
                         if (Auth.loginKey.currentState!.validate()) {
-                          auth.loginAccount(context, auth.author);
+                          auth.loginAccount(context);
                         }
                       },
                       label: "Login",
