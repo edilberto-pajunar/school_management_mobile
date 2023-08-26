@@ -4,8 +4,8 @@ import 'package:school_management/services/networks/auth/auth.dart';
 import 'package:school_management/services/networks/navigation.dart';
 import 'package:school_management/values/strings/colors.dart';
 import 'package:school_management/values/strings/images.dart';
-import 'package:school_management/views/screens/applications/transferee.dart';
 import 'package:school_management/views/screens/auth/login.dart';
+import 'package:school_management/views/screens/forms/forms.dart';
 import 'package:school_management/views/widgets/buttons/primary.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               child: GestureDetector(
-                onTap: () => nav.pushScreen(context, screen: const TransfereeFormScreen()),
+                onTap: () => nav.pushScreen(context, screen: const FormsScreen()),
                 child: Text("Click here to start.",
                   style: TextStyle(
                     color: ColorTheme.primaryRed,

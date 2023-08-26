@@ -4,8 +4,8 @@ import 'package:school_management/models/selection_option.dart';
 import 'package:school_management/services/networks/commons.dart';
 import 'package:school_management/services/networks/registration/application.dart';
 import 'package:school_management/values/strings/colors.dart';
-import 'package:school_management/views/widgets/buttons/check.dart';
-import 'package:school_management/views/widgets/buttons/radio.dart';
+import 'package:school_management/views/widgets/buttons/dropdown.dart';
+import 'package:school_management/views/widgets/fields/dropdown.dart';
 import 'package:school_management/views/widgets/fields/primary.dart';
 
 class BasicPersonalInfoForm extends StatelessWidget {
@@ -32,16 +32,38 @@ class BasicPersonalInfoForm extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        const SizedBox(height: 12.0),
 
-        PrimaryTextField(
-          fieldKey: Application.learningReferenceNumberKey,
-          controller: Application.learningReferenceNumber,
-          hintText: "Enter",
-          label: "B.1.1 Learning Reference Number (LRN) if assigned.",
-          validator: Commons.forcedTextValidator,
+        CustomDropdown<SelectionOption>(
+          initialValue: application.hasLRN,
+          value: application.hasLRN,
+          label: "Learning References Number (LRN)",
+          hintText: 'Select',
+          items: application.agreeDisagree.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateHasLRN,
+          validator: Commons.forcedDropdownValidator,
+        ),
+
+        Visibility(
+          visible: application.hasLRN?.label == "Yes",
+          child: PrimaryTextField(
+            fieldKey: Application.learningReferenceNumberKey,
+            controller: Application.learningReferenceNumber,
+            hintText: "Enter your assigned LRN",
+            label: "Learning Reference Number (LRN)",
+            validator: Commons.forcedTextValidator,
+          ),
         ),
         const SizedBox(height: 12.0),
-        Text("Write the name as it spelled in the NSA Birth Certificate. / Gamitin ang pagkasulat ng pangalan ayon sa nasa NSA Birth Certificate",
+        Text("Write the name as it spelled in the NSA Birth Certificate.",
           style: theme.textTheme.bodyMedium!.copyWith(
             color: ColorTheme.primaryRed,
           ),
@@ -50,39 +72,39 @@ class BasicPersonalInfoForm extends StatelessWidget {
         PrimaryTextField(
           fieldKey: Application.lastNameKey,
           controller: Application.lastName,
-          hintText: "Enter",
-          label: "B.1.2.1 Last name",
+          hintText: "Last name",
+          label: "Last name",
           validator: Commons.forcedTextValidator,
         ),
 
         PrimaryTextField(
           fieldKey: Application.firstNameKey,
           controller: Application.firstName,
-          hintText: "Enter",
-          label: "B.1.2.2 First name",
+          hintText: "First name",
+          label: "First name",
           validator: Commons.forcedTextValidator,
         ),
 
         PrimaryTextField(
           fieldKey: Application.middleNameKey,
           controller: Application.middleName,
-          hintText: "Enter",
-          label: "B.1.2.3 Middle name",
+          hintText: "Middle name",
+          label: "Middle name",
           validator: Commons.forcedTextValidator,
         ),
 
         PrimaryTextField(
           fieldKey: Application.extensionNameKey,
           controller: Application.extensionName,
-          hintText: "Enter",
-          label: "B.1.2.4 Extension name e.g. Jr.(if applicable)",
+          hintText: "Extension name e.g. Jr.(if applicable)",
+          label: "Extension name e.g. Jr.(if applicable)",
         ),
 
         PrimaryTextField(
           fieldKey: Application.placeOfBirthKey,
           controller: Application.placeOfBirth,
-          hintText: "Enter",
-          label: "B.1.3.1 Place of Birth(from PSA)",
+          hintText: "Place of Birth",
+          label: "Place of Birth",
           validator: Commons.forcedTextValidator,
 
         ),
@@ -91,7 +113,7 @@ class BasicPersonalInfoForm extends StatelessWidget {
           fieldKey: Application.dateOfBirthKey,
           controller: Application.dateOfBirth,
           hintText: "Enter",
-          label: "B.1.3.2 Date of Birth",
+          label: "Date of Birth",
           readOnly: true,
           onTap: () => application.updateBirthDate(context),
         ),
@@ -100,30 +122,29 @@ class BasicPersonalInfoForm extends StatelessWidget {
           fieldKey: Application.ageKey,
           controller: Application.age,
           hintText: "Enter",
-          label: "B.1.3.2 age (today)",
+          label: "Age (today)",
           validator: Commons.forcedTextValidator,
 
         ),
 
         const SizedBox(height: 12.0),
 
-        Row(
-          children: [
-            const Text("B.1.4 Gender"),
-            const SizedBox(width: 12.0),
-            Row(
-              children: application.genderList.map((SelectionOption value) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
-                  child: CustomRadioButton(
-                    value: application.gender == value,
-                    onTap: () => application.updateGender(value),
-                    label: value.name,
-                  ),
-                );
-              }).toList(),
-            ),
-          ],
+        CustomDropdown<SelectionOption>(
+          initialValue: application.gender,
+          value: application.gender,
+          label: "Gender",
+          hintText: 'Select',
+          items: application.genderList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateGender,
+          validator: Commons.forcedDropdownValidator,
         ),
 
         Visibility(
@@ -138,33 +159,39 @@ class BasicPersonalInfoForm extends StatelessWidget {
 
         const SizedBox(height: 12.0),
 
-        Row(
-          children: [
-            const Text("B.1.5 Belonging to Indigenous People?"),
-            const SizedBox(width: 12.0),
-            CustomCheckbox(
-              value: application.isIndigenousPeople,
-              onTap: () => application.updateIsIndigenousPeople(false),
-              option1: application.isIndigenousPeople ? "Yes" : "No",
-            ),
-          ],
+        CustomDropdown<SelectionOption>(
+          initialValue: application.isIndigenousPeople,
+          value: application.isIndigenousPeople,
+          label: "Belong to Indigenous People",
+          hintText: 'Select',
+          items: application.agreeDisagree.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateIsIndigenousPeople,
+          validator: Commons.forcedDropdownValidator,
         ),
-
-        Visibility(
-          visible: application.isIndigenousPeople,
-          child: PrimaryTextField(
-            fieldKey: Application.indigenousGroupKey,
-            controller: Application.indigenousGroup,
-            hintText: "Indigenous Group",
-            label: "Others (Specify)",
-          ),
-        ),
+        //
+        // Visibility(
+        //   visible: application.isIndigenousPeople,
+        //   child: PrimaryTextField(
+        //     fieldKey: Application.indigenousGroupKey,
+        //     controller: Application.indigenousGroup,
+        //     hintText: "Indigenous Group",
+        //     label: "Others (Specify)",
+        //   ),
+        // ),
 
         PrimaryTextField(
           fieldKey: Application.motherToungeKey,
           controller: Application.motherTounge,
           hintText: "Enter",
-          label: "B.1.6.1 Mother Tounge",
+          label: "Mother Tounge",
           validator: Commons.forcedTextValidator,
         ),
 
@@ -172,7 +199,7 @@ class BasicPersonalInfoForm extends StatelessWidget {
           fieldKey: Application.otherLanguagesKey,
           controller: Application.otherLanguages,
           hintText: "Enter",
-          label: "B.1.6.2 Other Languages Spoken",
+          label: "Other Languages Spoken",
         ),
       ],
     );

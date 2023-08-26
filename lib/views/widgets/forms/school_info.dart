@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:school_management/models/selection_option.dart';
 import 'package:school_management/services/networks/commons.dart';
 import 'package:school_management/services/networks/registration/application.dart';
-import 'package:school_management/views/widgets/buttons/check.dart';
+import 'package:school_management/views/widgets/buttons/dropdown.dart';
 import 'package:school_management/views/widgets/fields/dropdown.dart';
 import 'package:school_management/views/widgets/fields/primary.dart';
 
@@ -16,7 +16,6 @@ class SchoolInfoForm extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final Application application = Provider.of<Application>(context);
 
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -27,167 +26,183 @@ class SchoolInfoForm extends StatelessWidget {
         ),
         const SizedBox(height: 5.0),
         CustomDropdown<SelectionOption>(
-          label: "A1. School Year",
+          initialValue: application.schoolYear,
           value: application.schoolYear,
-          onChanged: (value) {},
+          label: "A1. School Year",
+          hintText: 'Select',
           items: application.schoolYearList.map((SelectionOption option) {
-            return DropdownMenuItem<SelectionOption>(
+            return SchoolDropdownMenuItem<SelectionOption>(
               value: option,
-              onTap: () => application.updateSchoolYear(option),
-              child: Text(option.name,
-                style: theme.textTheme.bodyMedium,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
               ),
             );
           }).toList(),
+          onChanged: application.updateSchoolYear,
+          validator: Commons.forcedDropdownValidator,
         ),
-        const SizedBox(height: 12.0),
-        Row(
-          children: [
-            const Text("A2. With LRN Assigned"),
-            const SizedBox(width: 12.0),
-            CustomCheckbox(
-              value: application.assignedLRN,
-              onTap: () => application.updateAssignedLRN(false),
-              option1: application.assignedLRN ? "Yes" : "No",
-            ),
-          ],
+        Text("Grade Level to Enroll in:",
+          style: theme.textTheme.bodyLarge!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
 
-        const SizedBox(height: 12.0),
-        Row(
-          children: [
-            const Text("A3. Residency"),
-            const SizedBox(width: 12.0),
-            CustomCheckbox(
-              value: application.newResidency,
-              onTap: () => application.updateNewResidency(false),
-              option1: application.newResidency
-                  ? "New"
-                  : "Returning",
-            ),
-          ],
-        ),
-
-        Row(
-          children: [
-            Expanded(
-              child:  PrimaryTextField(
-                prefixText: "Gr.",
-                fieldKey: Application.gradeToEnrollKey,
-                controller: Application.gradeToEnroll,
-                label: "A4. Grade Level to Enroll in",
-                validator: Commons.forcedTextValidator,
-              ),
-            ),
-            const SizedBox(width: 12.0),
-            Expanded(
-              child:  PrimaryTextField(
-                fieldKey: Application.lastGradeCompletedKey,
-                controller: Application.lastGradeCompleted,
-                prefixText: "Gr.",
-                label: "A5. Last Grade Level Completed",
-                validator: Commons.forcedTextValidator,
-              ),
-            ),
-
-          ],
-        ),
         PrimaryTextField(
-          fieldKey: Application.lastSchoolYearCompletedKey,
-          controller: Application.lastSchoolYearCompleted,
-          hintText: "School Year",
-          label: "A6. Last School Year Completed",
-          textInput: TextInputType.number,
-          validator: Commons.forcedTextValidator,
+          controller: TextEditingController(text: application.formLevel),
+          label: "Enter",
+          readOnly: true,
         ),
         const SizedBox(height: 24.0),
 
+        CustomDropdown<SelectionOption>(
+          initialValue: application.lastGradeCompleted,
+          value: application.lastGradeCompleted,
+          label: "Last Grade Level Completed",
+          hintText: 'Select',
+          items: application.gradeLevelList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateLastGradeCompleted,
+          validator: Commons.forcedDropdownValidator,
+        ),
+
+        CustomDropdown<SelectionOption>(
+          initialValue: application.lastSchoolYearCompleted,
+          value: application.lastSchoolYearCompleted,
+          label: "Last School Year Completed",
+          hintText: 'Select',
+          items: application.schoolYearList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateLastSchoolYearCompleted,
+          validator: Commons.forcedDropdownValidator,
+        ),
+
+        CustomDropdown<SelectionOption>(
+          initialValue: application.residence,
+          value: application.residence,
+          label: "Residency",
+          hintText: 'Select',
+          items: application.residenceList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateResidence,
+          validator: Commons.forcedDropdownValidator,
+        ),
+
         Text("INFORMATION ON SCHOOL LAST ATTENDED",
           softWrap: true,
-          style: theme.textTheme.bodyLarge!,
+          style: theme.textTheme.bodyLarge!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
 
         PrimaryTextField(
           fieldKey: Application.schoolNameKey,
           controller: Application.schoolName,
-          hintText: "",
-          label: "A7. Name of school",
+          hintText: "Name of School",
+          label: "Name of school",
           validator: Commons.forcedTextValidator,
         ),
 
         PrimaryTextField(
           fieldKey: Application.schoolIDKey,
           controller: Application.schoolID,
-          hintText: "",
-          label: "A8. School ID",
+          hintText: "School ID",
+          label: "School ID",
           validator: Commons.forcedTextValidator,
         ),
 
         PrimaryTextField(
           fieldKey: Application.schoolAddressKey,
           controller: Application.schoolAddress,
-          hintText: "",
-          label: "A9. School Address",
+          hintText: "School Address",
+          label: "School Address",
           validator: Commons.forcedTextValidator,
         ),
-
         const SizedBox(height: 12.0),
-        Row(
-          children: [
-            const Text("A10. School Type"),
-            const SizedBox(width: 12.0),
-            CustomCheckbox(
-              value: application.schoolType,
-              onTap: () => application.updateSchoolType(false),
-              option1: application.schoolType
-                  ? "Public"
-                  : "Private",
-            ),
-          ],
+
+        CustomDropdown<SelectionOption>(
+          initialValue: application.schoolType,
+          value: application.schoolType,
+          label: "School Type",
+          hintText: 'Select',
+          items: application.schoolTypeList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateSchoolType,
+          validator: Commons.forcedDropdownValidator,
         ),
 
-        const SizedBox(height: 12.0),
-        Row(
-          children: [
-            const Expanded(
-              child: Text("A11 a. Copy of Birth Certificate (PSA) Submitted?"),
-            ),
-            const SizedBox(width: 12.0),
-            CustomCheckbox(
-              value: application.submitCopyPSA,
-              onTap: () => application.updateSubmitCopyPSA(false),
-              option1: application.submitCopyPSA
-                  ? "Yes"
-                  : "No",
-            ),
-          ],
+        CustomDropdown<SelectionOption>(
+          initialValue: application.submitCopyPSA,
+          value: application.submitCopyPSA,
+          label: "Copy of Certificate (PSA) Submitted",
+          hintText: 'Select',
+          items: application.agreeDisagree.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateSubmitCopyPSA,
+          validator: Commons.forcedDropdownValidator,
         ),
+
 
         PrimaryTextField(
           fieldKey: Application.birthCertNumberKey,
           controller: Application.birthCertNumber,
-          hintText: "Enter",
-          label: "B.1.b. PSA Birth Certificate No.",
+          hintText: "PSA Birth Certificate No.",
+          label: "PSA Birth Certificate No.",
           validator: Commons.forcedTextValidator,
         ),
 
         const SizedBox(height: 12.0),
-        const Text("A11 b. Other Enrolment Requirements Submitted as of this date?"),
-        const SizedBox(height: 12.0),
-        Row(
-          children: [
-            CustomCheckbox(
-              value: application.passForm137,
-              onTap: () => application.updatePassForm137(false),
-              option1: "Form 137",
-            ),
-            const SizedBox(width: 24.0),
-            CustomCheckbox(
-              value: application.passForm138,
-              onTap: () => application.updatePassForm138(false),
-              option1: "Form 138",
-            ),
-          ],
+        CustomDropdown<SelectionOption>(
+          initialValue: application.otherRequirements,
+          value: application.otherRequirements,
+          label: "Other Enrollment Requirements Submitted as of this Date",
+          hintText: 'Select',
+          items: application.otherRequirementsList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateOtherRequirements,
+          validator: Commons.forcedDropdownValidator,
         ),
       ],
     );

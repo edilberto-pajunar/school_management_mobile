@@ -7,6 +7,7 @@ import 'package:school_management/models/student/profile.dart';
 import 'package:school_management/services/networks/auth/auth.dart';
 import 'package:school_management/services/networks/commons.dart';
 import 'package:school_management/services/networks/instructor/db.dart';
+import 'package:school_management/services/networks/storage.dart';
 import 'package:school_management/services/networks/student/db.dart';
 import 'package:school_management/values/strings/api/key.dart';
 import 'package:school_management/values/theme.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => Commons()),
         ChangeNotifierProvider(create: (context) => InstructorDB()),
         ChangeNotifierProvider(create: (context) => ProfileServices()),
+        ChangeNotifierProvider(create: (context) => StorageProvider()),
         ChangeNotifierProvider(create: (context) => StudentDB()),
       ],
       child: MaterialApp(

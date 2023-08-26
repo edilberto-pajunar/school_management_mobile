@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:school_management/values/strings/colors.dart';
 
 class PrimaryTextField extends StatelessWidget {
@@ -13,6 +14,7 @@ class PrimaryTextField extends StatelessWidget {
     this.prefixText,
     this.readOnly = false,
     this.onTap,
+    this.inputFormatters,
     super.key,
 
   });
@@ -27,6 +29,7 @@ class PrimaryTextField extends StatelessWidget {
   final String? prefixText;
   final bool readOnly;
   final Function()? onTap;
+  final List<TextInputFormatter>? inputFormatters;
 
 
   @override
@@ -44,6 +47,7 @@ class PrimaryTextField extends StatelessWidget {
         TextFormField(
           key: fieldKey,
           onTapOutside: (PointerDownEvent event) {
+
             FocusScope.of(context).unfocus();
           },
           style: theme.textTheme.bodyMedium!,
@@ -51,6 +55,7 @@ class PrimaryTextField extends StatelessWidget {
           controller: controller,
           readOnly: readOnly,
           onTap: onTap,
+          inputFormatters: inputFormatters,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12.0, vertical: 12.0,),

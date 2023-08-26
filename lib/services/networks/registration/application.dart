@@ -18,27 +18,40 @@ class Application extends ChangeNotifier {
     notifyListeners();
   }
 
+  String? formLevel;
 
-  final List<SelectionOption> schoolYearList = [
-    SelectionOption(id: 0, name: "2023-2024"),
-    SelectionOption(id: 1, name: "2022-2023"),
-    SelectionOption(id: 2, name: "2021-2022"),
-    SelectionOption(id: 3, name: "2020-2021"),
+  void updateFormLevel(String? value) {
+    formLevel = value;
+    notifyListeners();
+  }
+
+
+  final List<SelectionOption> schoolYearList = const [
+    SelectionOption(id: 0, label: "2023-2024"),
+    SelectionOption(id: 1, label: "2024-2025"),
+    SelectionOption(id: 2, label: "2025-2026"),
+    SelectionOption(id: 3, label: "2026-2027"),
+    SelectionOption(id: 4, label: "2027-2028"),
+    SelectionOption(id: 5, label: "2028-2029"),
+    SelectionOption(id: 6, label: "2029-2030"),
+    SelectionOption(id: 7, label: "2030-2031"),
+    SelectionOption(id: 8, label: "2031-2032"),
+    SelectionOption(id: 9, label: "2032-2033"),
   ];
 
   SelectionOption? schoolYear;
 
-  void updateSchoolYear(SelectionOption value) {
+  void updateSchoolYear(SelectionOption? value) {
     schoolYear = value;
     notifyListeners();
   }
 
-  bool assignedLRN = false;
-
-  void updateAssignedLRN(bool? value) {
-    assignedLRN = !assignedLRN;
-    notifyListeners();
-  }
+  // SelectionOption? assignedLRN;
+  //
+  // void updateAssignedLRN(SelectionOption? value) {
+  //   assignedLRN = value;
+  //   notifyListeners();
+  // }
 
   bool newResidency = false;
 
@@ -52,11 +65,47 @@ class Application extends ChangeNotifier {
   static TextEditingController gradeToEnroll = TextEditingController();
   static GlobalKey<FormFieldState> gradeToEnrollKey = GlobalKey();
 
-  static TextEditingController lastGradeCompleted = TextEditingController();
-  static GlobalKey<FormFieldState> lastGradeCompletedKey = GlobalKey();
+  final List<SelectionOption> gradeLevelList = const [
+    SelectionOption(id: 0, label: "Grade 1"),
+    SelectionOption(id: 1, label: "Grade 2"),
+    SelectionOption(id: 2, label: "Grade 3"),
+    SelectionOption(id: 3, label: "Grade 4"),
+    SelectionOption(id: 4, label: "Grade 5"),
+    SelectionOption(id: 5, label: "Grade 6"),
+    SelectionOption(id: 6, label: "Grade 7"),
+  ];
 
-  static TextEditingController lastSchoolYearCompleted = TextEditingController();
-  static GlobalKey<FormFieldState> lastSchoolYearCompletedKey = GlobalKey();
+  SelectionOption? lastGradeCompleted;
+
+  void updateLastGradeCompleted(SelectionOption? value) {
+    lastGradeCompleted = value;
+    notifyListeners();
+  }
+
+  // static TextEditingController lastGradeCompleted = TextEditingController();
+  // static GlobalKey<FormFieldState> lastGradeCompletedKey = GlobalKey();
+
+  // static TextEditingController lastSchoolYearCompleted = TextEditingController();
+  // static GlobalKey<FormFieldState> lastSchoolYearCompletedKey = GlobalKey();
+
+  SelectionOption? lastSchoolYearCompleted;
+
+  void updateLastSchoolYearCompleted(SelectionOption? value) {
+    lastSchoolYearCompleted = value;
+    notifyListeners();
+  }
+
+  final List<SelectionOption> residenceList = const [
+    SelectionOption(id: 0, label: "New"),
+    SelectionOption(id: 1, label: "Returning"),
+  ];
+
+  SelectionOption? residence;
+
+  void updateResidence(SelectionOption? value) {
+    residence = value;
+    notifyListeners();
+  }
 
   static TextEditingController schoolName = TextEditingController();
   static GlobalKey<FormFieldState> schoolNameKey = GlobalKey();
@@ -64,44 +113,86 @@ class Application extends ChangeNotifier {
   static TextEditingController schoolID = TextEditingController();
   static GlobalKey<FormFieldState> schoolIDKey = GlobalKey();
 
+  final List<SelectionOption> schoolTypeList = const [
+    SelectionOption(id: 0, label: "Public School"),
+    SelectionOption(id: 1, label: "Private School"),
+  ];
+
+  SelectionOption? schoolType;
+
+  void updateSchoolType(SelectionOption? value) {
+    schoolType = value;
+    notifyListeners();
+  }
+
   static TextEditingController schoolAddress = TextEditingController();
   static GlobalKey<FormFieldState> schoolAddressKey = GlobalKey();
+  //
+  // bool schoolType = false;
+  //
+  // void updateSchoolType(bool? value) {
+  //   schoolType = !schoolType;
+  //   notifyListeners();
+  // }
 
-  bool schoolType = false;
+  final List<SelectionOption> agreeDisagree = const [
+    SelectionOption(id: 0, label: "Yes"),
+    SelectionOption(id: 1, label: "No"),
+  ];
 
-  void updateSchoolType(bool? value) {
-    schoolType = !schoolType;
+  SelectionOption? submitCopyPSA;
+
+  void updateSubmitCopyPSA(SelectionOption? value) {
+    submitCopyPSA = value;
     notifyListeners();
   }
 
-  bool submitCopyPSA = false;
+  // bool submitCopyPSA = false;
+  //
+  // void updateSubmitCopyPSA(bool? value) {
+  //   submitCopyPSA = !submitCopyPSA;
+  //   notifyListeners();
+  // }
+  final List<SelectionOption> otherRequirementsList = const [
+    SelectionOption(id: 0, label: "Form 138"),
+    SelectionOption(id: 1, label: "Form 137"),
+  ];
 
-  void updateSubmitCopyPSA(bool? value) {
-    submitCopyPSA = !submitCopyPSA;
+  SelectionOption? otherRequirements;
+
+  void updateOtherRequirements(SelectionOption? value) {
+    otherRequirements = value;
     notifyListeners();
   }
 
-  bool passForm137 = false;
-
-  void updatePassForm137(bool? value) {
-    passForm137 = !passForm137;
-    notifyListeners();
-  }
-
-  bool passForm138 = false;
-
-  void updatePassForm138(bool? value) {
-    passForm138 = !passForm138;
-    notifyListeners();
-  }
+  // bool passForm137 = false;
+  //
+  // void updatePassForm137(bool? value) {
+  //   passForm137 = !passForm137;
+  //   notifyListeners();
+  // }
+  //
+  // bool passForm138 = false;
+  //
+  // void updatePassForm138(bool? value) {
+  //   passForm138 = !passForm138;
+  //   notifyListeners();
+  // }
 
   static TextEditingController birthCertNumber = TextEditingController();
   static GlobalKey<FormFieldState> birthCertNumberKey = GlobalKey();
 
+  SelectionOption? hasLRN;
+
+  void updateHasLRN(SelectionOption? value) {
+    hasLRN = value;
+    notifyListeners();
+  }
+
   static TextEditingController learningReferenceNumber = TextEditingController();
   static GlobalKey<FormFieldState> learningReferenceNumberKey = GlobalKey();
 
-  static TextEditingController lastName = TextEditingController();
+  static TextEditingController lastName= TextEditingController();
   static GlobalKey<FormFieldState> lastNameKey = GlobalKey();
 
   static TextEditingController firstName = TextEditingController();
@@ -148,10 +239,10 @@ class Application extends ChangeNotifier {
 
   SelectionOption? gender;
 
-  final List<SelectionOption> genderList = [
-    SelectionOption(id: 0, name: "Male"),
-    SelectionOption(id: 1, name: "Female"),
-    SelectionOption(id: 2, name: "Others"),
+  final List<SelectionOption> genderList = const [
+    SelectionOption(id: 0, label: "Male"),
+    SelectionOption(id: 1, label: "Female"),
+    SelectionOption(id: 2, label: "Others"),
   ];
 
   void updateGender(SelectionOption? value) {
@@ -162,10 +253,10 @@ class Application extends ChangeNotifier {
   static TextEditingController otherGender = TextEditingController();
   static GlobalKey<FormFieldState> otherGenderKey = GlobalKey();
 
-  bool isIndigenousPeople = false;
+  SelectionOption? isIndigenousPeople;
 
-  void updateIsIndigenousPeople(bool? value) {
-    isIndigenousPeople = !isIndigenousPeople;
+  void updateIsIndigenousPeople(SelectionOption? value) {
+    isIndigenousPeople = value;
     notifyListeners();
   }
 
@@ -178,6 +269,19 @@ class Application extends ChangeNotifier {
   static TextEditingController otherLanguages = TextEditingController();
   static GlobalKey<FormFieldState> otherLanguagesKey = GlobalKey();
 
+  SelectionOption? accessComm;
+
+  final List<SelectionOption> accessCommList = const [
+    SelectionOption(id: 0, label: "Own Mobile Phone"),
+    SelectionOption(id: 1, label: "Parents/relative Mobile Phone"),
+  ];
+
+  void updateAccessComm(SelectionOption? value) {
+    accessComm = value;
+    notifyListeners();
+  }
+
+
   bool hasPhone = false;
 
   void updateCommunication(bool value) {
@@ -188,24 +292,59 @@ class Application extends ChangeNotifier {
   static TextEditingController phoneNumber = TextEditingController();
   static GlobalKey<FormFieldState> phoneNumberKey = GlobalKey();
 
-  static TextEditingController emergencyName = TextEditingController();
-  static GlobalKey<FormFieldState> emergencyNameKey = GlobalKey();
+  static TextEditingController emergencyFirstName = TextEditingController();
+  static GlobalKey<FormFieldState> emergencyFirstNameKey = GlobalKey();
+
+  static TextEditingController emergencyMiddleName = TextEditingController();
+  static GlobalKey<FormFieldState> emergencyMiddleNameKey = GlobalKey();
+
+  static TextEditingController emergencyLastName = TextEditingController();
+  static GlobalKey<FormFieldState> emergencyLastNameKey = GlobalKey();
 
   static TextEditingController emergencyAddress = TextEditingController();
   static GlobalKey<FormFieldState> emergencyAddressKey = GlobalKey();
 
-  static TextEditingController relation = TextEditingController();
-  static GlobalKey<FormFieldState> relationKey = GlobalKey();
+  SelectionOption? relationship;
+
+  final List<SelectionOption> relationshipList = const [
+    SelectionOption(id: 0, label: "Mother"),
+    SelectionOption(id: 1, label: "Father"),
+    SelectionOption(id: 1, label: "Daughter"),
+    SelectionOption(id: 1, label: "Son"),
+    SelectionOption(id: 1, label: "Aunt"),
+    SelectionOption(id: 1, label: "Uncle"),
+    SelectionOption(id: 1, label: "Cousin"),
+    SelectionOption(id: 1, label: "Sister"),
+    SelectionOption(id: 1, label: "Brother"),
+    SelectionOption(id: 1, label: "Grandmother"),
+    SelectionOption(id: 1, label: "Grandfather"),
+    SelectionOption(id: 1, label: "Granddaughter"),
+    SelectionOption(id: 1, label: "Grandson"),
+    SelectionOption(id: 1, label: "Niece"),
+    SelectionOption(id: 1, label: "Nephew"),
+    SelectionOption(id: 1, label: "Half-Sister"),
+    SelectionOption(id: 1, label: "Half-Brother"),
+    SelectionOption(id: 1, label: "Step-Mother"),
+    SelectionOption(id: 1, label: "Step-Father"),
+    SelectionOption(id: 1, label: "Step-Daughter"),
+    SelectionOption(id: 1, label: "Step-Son"),
+    SelectionOption(id: 1, label: "In-Law"),
+  ];
+
+  void updateRelationship(SelectionOption? value) {
+    relationship = value;
+    notifyListeners();
+  }
 
   static TextEditingController emergencyPhone = TextEditingController();
   static GlobalKey<FormFieldState> emergencyPhoneKey = GlobalKey();
 
   SelectionOption? currentHousehold;
 
-  final List<SelectionOption> householdList = [
-    SelectionOption(id: 0, name: "Own Family/Sariling Pamilya"),
-    SelectionOption(id: 1, name: "Relative/Kamag-anak"),
-    SelectionOption(id: 2, name: "Non-relative/Hindi kamag-anak"),
+  final List<SelectionOption> householdList = const [
+    SelectionOption(id: 0, label: "Own Family/Sariling Pamilya"),
+    SelectionOption(id: 1, label: "Relative/Kamag-anak"),
+    SelectionOption(id: 2, label: "Non-relative/Hindi kamag-anak"),
   ];
 
   void updateCurrentHousehold(SelectionOption? value) {
@@ -243,39 +382,35 @@ class Application extends ChangeNotifier {
   static TextEditingController familyRegion = TextEditingController();
   static GlobalKey<FormFieldState> familyRegionKey = GlobalKey();
 
-  final List<SelectionOption> responsibleList = [
-    SelectionOption(id: 0, name: "Both Parents / Ama at Ina"),
-    SelectionOption(id: 1, name: "Father / Ama"),
-    SelectionOption(id: 2, name: "Mother / Ina"),
-    SelectionOption(id: 3, name: "Brothers / Kuya"),
-    SelectionOption(id: 4, name: "Sisters / Ate"),
-    SelectionOption(id: 5, name: "Uncles / Tiyo"),
-    SelectionOption(id: 6, name: "Aunts / Tiya"),
-    SelectionOption(id: 7, name: "Grandfather / Lolo"),
-    SelectionOption(id: 8, name: "Grandmother / Lola"),
-    SelectionOption(id: 9, name: "Others"),
+  final List<SelectionOption> responsibleList = const [
+    SelectionOption(id: 0, label: "Both Parents / Ama at Ina"),
+    SelectionOption(id: 1, label: "Father / Ama"),
+    SelectionOption(id: 2, label: "Mother / Ina"),
+    SelectionOption(id: 3, label: "Brothers / Kuya"),
+    SelectionOption(id: 4, label: "Sisters / Ate"),
+    SelectionOption(id: 5, label: "Uncles / Tiyo"),
+    SelectionOption(id: 6, label: "Aunts / Tiya"),
+    SelectionOption(id: 7, label: "Grandfather / Lolo"),
+    SelectionOption(id: 8, label: "Grandmother / Lola"),
+    SelectionOption(id: 9, label: "Others"),
   ];
 
-  List<SelectionOption> responsible = [];
+  SelectionOption? responsible;
 
-  void updateResponsible(SelectionOption value) {
-    if (!responsible.contains(value)) {
-      responsible.add(value);
-    } else {
-      responsible.remove(value);
-    }
+  void updateResponsible(SelectionOption? value) {
+    responsible = value;
     notifyListeners();
   }
-  
-  final List<SelectionOption> statusList = [
-    SelectionOption(id: 0, name: "Married & living together"),
-    SelectionOption(id: 1, name: "Married but father is working elsewhere"),
-    SelectionOption(id: 1, name: "Married but mother is working elsewhere"),
-    SelectionOption(id: 2, name: "Separated/Hiwalay"),
-    SelectionOption(id: 3, name: "Father is deceased / Pumanaw na ang ama"),
-    SelectionOption(id: 3, name: "Mother is deceased / Pumanaw na ang ina"),
-    SelectionOption(id: 4, name: "Both parents are deceased"),
-    SelectionOption(id: 4, name: "Other / unclear"),
+
+  final List<SelectionOption> statusList = const [
+    SelectionOption(id: 0, label: "Married & living together"),
+    SelectionOption(id: 1, label: "Married but father is working elsewhere"),
+    SelectionOption(id: 1, label: "Married but mother is working elsewhere"),
+    SelectionOption(id: 2, label: "Separated/Hiwalay"),
+    SelectionOption(id: 3, label: "Father is deceased / Pumanaw na ang ama"),
+    SelectionOption(id: 3, label: "Mother is deceased / Pumanaw na ang ina"),
+    SelectionOption(id: 4, label: "Both parents are deceased"),
+    SelectionOption(id: 4, label: "Other / unclear"),
   ];
 
   SelectionOption? status;
@@ -291,22 +426,72 @@ class Application extends ChangeNotifier {
   static TextEditingController numberOfSister = TextEditingController();
   static GlobalKey<FormFieldState> numberOfSisterKey = GlobalKey();
 
+  static TextEditingController birthOrder = TextEditingController();
+  static GlobalKey<FormFieldState> birthOrderKey = GlobalKey();
+
+  SelectionOption? is4psBeneficiary;
+
+  void updateIs4psBeneficiary(SelectionOption? option) {
+    is4psBeneficiary = option;
+    notifyListeners();
+  }
+
+  static TextEditingController whenBeneficiary = TextEditingController();
+  static GlobalKey<FormFieldState> whenBeneficiaryKey = GlobalKey();
+
+  static TextEditingController lastNamePrinted = TextEditingController();
+  static GlobalKey<FormFieldState> lastNamePrintedKey = GlobalKey();
+
+  static TextEditingController firstNamePrinted = TextEditingController();
+  static GlobalKey<FormFieldState> firstNamePrintedKey = GlobalKey();
+
+  static TextEditingController middleNamePrinted = TextEditingController();
+  static GlobalKey<FormFieldState> middleNamePrintedKey = GlobalKey();
+
+  static TextEditingController learnerRelation = TextEditingController();
+  static GlobalKey<FormFieldState> learnerRelationKey = GlobalKey();
+
+  static TextEditingController dateEntered = TextEditingController();
+  static GlobalKey<FormFieldState> dateEnteredKey = GlobalKey();
+
+  Future<void> updateDateEntered(BuildContext context) async {
+    DateTime? birthDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now().subtract(const Duration(days: 6570)),
+      firstDate: DateTime.now().subtract(const Duration(days: 37620)),
+      lastDate: DateTime.now().subtract(const Duration(days: 6570)),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+    );
+
+    // DateFormat format = DateFormat('MM/dd/yyyy');
+
+    if (birthDate != null) {
+      DateTime enteredDate = birthDate;
+      // DateTime currentDate = DateTime.now();
+
+      dateEntered.text = DateFormat("MM/dd/yyyy").format(enteredDate);
+      notifyListeners();
+    }
+
+    dateOfBirthKey.currentState!.validate();
+  }
+
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
   SchoolInfo get getSchoolInfo {
     final SchoolInfo schoolInfo = SchoolInfo(
-        schoolYear: schoolYear!.name,
-        lrnAssigned: assignedLRN,
-        residency: newResidency ? "New" : "Returning",
-        gradeToEnroll: gradeToEnroll.text,
-        lastGradeCompleted: lastGradeCompleted.text,
-        lastSchoolYear: lastSchoolYearCompleted.text,
+        schoolYear: schoolYear!.label,
+        gradeToEnroll: formLevel!,
+        lastGradeCompleted: lastGradeCompleted!.label,
+        lastSchoolYear: lastSchoolYearCompleted!.label,
+        residency: residence!.label,
         nameOfSchool: schoolName.text,
         schoolId: schoolID.text,
         schoolAddress: schoolAddress.text,
-        schoolType: schoolType ? "Public" : "Private",
-        isPsaSubmitted: submitCopyPSA,
-        otherRequirements: "Form 137",
+        schoolType: schoolType!.label,
+        isPsaSubmitted: submitCopyPSA!.id == 0 ? true : false,
+        birthCertificate: birthCertNumber.text,
+        otherRequirements: otherRequirements!.label,
     );
 
     return schoolInfo;
@@ -314,6 +499,7 @@ class Application extends ChangeNotifier {
 
   PersonalInfo get getPersonalInfo {
     final PersonalInfo personalInfo = PersonalInfo(
+      hasLrn: hasLRN!.id == 0 ? true : false,
       lrn: learningReferenceNumber.text,
       lastName: lastName.text,
       firstName: firstName.text,
@@ -322,7 +508,8 @@ class Application extends ChangeNotifier {
       placeOfBirth: placeOfBirth.text,
       dateOfBirth: dateOfBirth.text,
       age: age.text,
-      gender: gender!.name,
+      gender: gender!.label,
+      isIndigenous: isIndigenousPeople!.id == 0 ? true : false,
       motherTounge: motherTounge.text,
       otherLanguage: otherLanguages.text,
     );
@@ -334,9 +521,10 @@ class Application extends ChangeNotifier {
     final EmergencyInfo emergencyInfo = EmergencyInfo(
       communication: hasPhone ? "May Sariling Cellphone" : "Cellphone ng Magulang",
       number: phoneNumber.text,
-      emergencyPerson: emergencyName.text,
+      emergencyPerson: "${emergencyFirstName.text} ${emergencyMiddleName.text} ${emergencyLastName.text}",
       emergencyAddress: emergencyAddress.text,
-      relasyon: relation.text,
+      relationship: relationship!.label,
+      address: emergencyAddress.text,
       contactNumber: emergencyPhone.text,
     );
 
@@ -345,25 +533,30 @@ class Application extends ChangeNotifier {
 
   ResidenceInfo get getResidenceInfo {
     final ResidenceInfo residenceInfo = ResidenceInfo(
-      household: currentHousehold!.name,
+      household: currentHousehold!.label,
       currentAddress: Address(
-          addres: address.text,
+          address: address.text,
           barangay: barangay.text,
           city: city.text,
           province: province.text,
           region: region.text,
       ),
       familyAddress:  Address(
-        addres: familyAddress.text,
+        address: familyAddress.text,
         barangay: familyBarangay.text,
         city: familyCity.text,
         province: familyProvince.text,
         region: familyRegion.text,
       ),
-      familyInfo: responsible.map((e) => e.name).toList(),
-      statusOfParents: status!.name,
+      familyInfo: responsible!.label,
+      statusOfParents: status!.label,
       numberOfBrothers: numberOfBrother.text,
       numberOfSisters: numberOfSister.text,
+      is4psBeneficiary: is4psBeneficiary!.id == 0 ? true : false,
+      whenBeneficiary: whenBeneficiary.text,
+      printedName: "${firstNamePrinted.text} ${middleNamePrinted.text} ${lastNamePrinted.text}",
+      printedRelation: learnerRelation.text,
+      printedDate: dateEntered.text,
     );
 
     return residenceInfo;
@@ -387,35 +580,37 @@ class Application extends ChangeNotifier {
 
     } catch (e) {
       showHUD(false);
-      await showDialog(context: context, builder: (context) {
-        return AlertDialog(
-          content: Text("Please enter all valid requirements",
-            style: theme.textTheme.bodyMedium!.copyWith(
-              color: Colors.red,
+      Future.delayed(Duration.zero, () {
+        showDialog(context: context, builder: (context) {
+          return AlertDialog(
+            content: Text("Please enter all valid requirements",
+              style: theme.textTheme.bodyMedium!.copyWith(
+                color: Colors.red,
+              ),
             ),
-          ),
-        );
+          );
+        });
       });
-      throw "Error: ${e}";
+
+      throw "Error: $e";
     }
 
   }
 
   void clearForm() {
     schoolYear = null;
-    assignedLRN = false;
     newResidency = false;
     gradeToEnroll.clear();
-    lastGradeCompleted.clear();
-    lastSchoolYearCompleted.clear();
+    lastGradeCompleted = null;
+    lastSchoolYearCompleted = null;
     schoolName.clear();
     schoolID.clear();
     schoolAddress.clear();
-    schoolType = false;
-    submitCopyPSA = false;
+    schoolType = null;
+    submitCopyPSA = null;
     birthCertNumber.clear();
-    passForm137 = false;
-    passForm138 = false;
+    // passForm137 = false;
+    // passForm138 = false;
     learningReferenceNumber.clear();
     lastName.clear();
     firstName.clear();
@@ -425,15 +620,17 @@ class Application extends ChangeNotifier {
     dateOfBirth.clear();
     age.clear();
     gender = null;
-    isIndigenousPeople = false;
+    isIndigenousPeople = null;
     indigenousGroup.clear();
     motherTounge.clear();
     otherLanguages.clear();
     hasPhone = false;
     phoneNumber.clear();
-    emergencyName.clear();
+    emergencyFirstName.clear();
+    emergencyMiddleName.clear();
+    emergencyLastName.clear();
     emergencyAddress.clear();
-    relation.clear();
+    relationship = null;
     emergencyPhone.clear();
     currentHousehold = null;
     address.clear();
@@ -445,7 +642,7 @@ class Application extends ChangeNotifier {
     familyBarangay.clear();
     familyCity.clear();
     familyRegion.clear();
-    responsible = [];
+    responsible = null;
     status = null;
     numberOfBrother.clear();
     numberOfSister.clear();

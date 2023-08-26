@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:school_management/models/student/profile.dart';
 import 'package:school_management/views/widgets/buttons/primary.dart';
 import 'package:school_management/views/widgets/cards/list_tile.dart';
-import 'package:school_management/views/widgets/drawer/primary.dart';
 import 'package:school_management/views/widgets/fields/primary.dart';
 
 class PersonalProfileScreen extends StatelessWidget {
@@ -16,7 +15,6 @@ class PersonalProfileScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(),
-        drawer: const PrimaryDrawer(),
         body: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(

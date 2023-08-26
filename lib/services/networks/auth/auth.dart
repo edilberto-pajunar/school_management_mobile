@@ -52,7 +52,6 @@ class Auth extends ChangeNotifier {
         password: password.text,
       ).then((UserCredential value) {
 
-
         if (uids.contains(value.user!.uid)) {
           // Update the user model
           user = UserModel(
@@ -61,7 +60,7 @@ class Auth extends ChangeNotifier {
             id: value.user!.uid,
           );
 
-          if (author == "instructors") {
+          if (author == "instructor") {
             nav.pushScreen(context,
               screen: const InstructorHomeScreen(),
             );
@@ -91,6 +90,15 @@ class Auth extends ChangeNotifier {
       return userCredential;
     } catch (e) {
       showHUD(false);
+      showDialog(context: context, builder: (context) {
+        return AlertDialog(
+          content: Text("Wrong control number/password.",
+            style: theme.textTheme.bodyMedium!.copyWith(
+              color: Colors.red,
+            ),
+          ),
+        );
+      });
       throw "Error: $e";
     }
   }

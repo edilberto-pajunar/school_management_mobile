@@ -130,8 +130,15 @@ class _PersonalHomeScreenState extends State<PersonalHomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomListTile(
-                        leading: const CircleAvatar(
-                          radius: 30,
+                        leading: InkWell(
+                          onTap: () async {
+                            await studentDB.pickFile(context).whenComplete(() {
+                              studentDB.uploadFileFirebase();
+                            });
+                          },
+                          child: const CircleAvatar(
+                            radius: 30,
+                          ),
                         ),
                         title: Text(student.name,
                           style: theme.textTheme.titleSmall!.copyWith(

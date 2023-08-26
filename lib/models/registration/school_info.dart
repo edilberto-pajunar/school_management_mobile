@@ -10,38 +10,39 @@ String schoolInfoToJson(SchoolInfo data) => json.encode(data.toJson());
 
 class SchoolInfo {
   String schoolYear;
-  bool lrnAssigned;
-  String residency;
   String gradeToEnroll;
   String lastGradeCompleted;
   String lastSchoolYear;
+  String residency;
+  // bool lrnAssigned;
+  // String? lrn;
   String nameOfSchool;
   String schoolId;
   String schoolAddress;
   String schoolType;
   bool isPsaSubmitted;
+  String birthCertificate;
   String otherRequirements;
 
   SchoolInfo({
     required this.schoolYear,
-    required this.lrnAssigned,
-    required this.residency,
     required this.gradeToEnroll,
     required this.lastGradeCompleted,
     required this.lastSchoolYear,
+    required this.residency,
     required this.nameOfSchool,
     required this.schoolId,
     required this.schoolAddress,
     required this.schoolType,
     required this.isPsaSubmitted,
+    required this.birthCertificate,
     required this.otherRequirements,
   });
 
   factory SchoolInfo.fromJson(Map<String, dynamic> json) => SchoolInfo(
     schoolYear: json["schoolYear"] as String,
-    lrnAssigned: json["lrnAssigned"] as bool,
-    residency: json["residency"] as String,
     gradeToEnroll: json["gradeToEnroll"] as String,
+    residency: json["residency"] as String,
     lastGradeCompleted: json["lastGradeCompleted"] as String,
     lastSchoolYear: json["lastSchoolYear"] as String,
     nameOfSchool: json["nameOfSchool"] as String,
@@ -49,21 +50,22 @@ class SchoolInfo {
     schoolAddress: json["schoolAddress"] as String,
     schoolType: json["schoolType"] as String,
     isPsaSubmitted: json["isPSASubmitted"] as bool,
+    birthCertificate: json["birthCertificate"] as String,
     otherRequirements: json["otherRequirements"] as String,
   );
 
   Map<String, dynamic> toJson() => {
     "schoolYear": schoolYear,
-    "lrnAssigned": lrnAssigned,
-    "residency": residency,
     "gradeToEnroll": gradeToEnroll,
     "lastGradeCompleted": lastGradeCompleted,
     "lastSchoolYear": lastSchoolYear,
+    "residency": residency,
     "nameOfSchool": nameOfSchool,
     "schoolId": schoolId,
     "schoolAddress": schoolAddress,
     "schoolType": schoolType,
     "isPSASubmitted": isPsaSubmitted,
+    "birthCertificate": birthCertificate,
     "otherRequirements": otherRequirements,
   };
 }

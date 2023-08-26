@@ -1,17 +1,17 @@
 class StudentModel {
-  String controlNumber;
+  String? controlNumber;
   String name;
   String grade;
   String id;
-  String lrn;
+  String? lrn;
   String section;
 
   StudentModel({
-    required this.controlNumber,
+    this.controlNumber,
     required this.name,
     required this.grade,
     required this.id,
-    required this.lrn,
+    this.lrn,
     required this.section,
   });
 

@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:school_management/models/selection_option.dart';
 import 'package:school_management/services/networks/commons.dart';
 import 'package:school_management/services/networks/registration/application.dart';
-import 'package:school_management/views/widgets/buttons/radio.dart';
+import 'package:school_management/views/widgets/buttons/dropdown.dart';
+import 'package:school_management/views/widgets/fields/dropdown.dart';
 import 'package:school_management/views/widgets/fields/primary.dart';
 
 class ResidenceForm extends StatelessWidget {
@@ -20,41 +21,62 @@ class ResidenceForm extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(height: 12.0),
-        Text("B.3. Residence",
+        Text("B.2. Residence",
           style: theme.textTheme.bodyMedium!.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),
-        Row(
-          children: [
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.2,
-                child: const Text("B.3.1. Household Currently living in",)),
-            const SizedBox(width: 12.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: application.householdList.map((SelectionOption value) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: CustomRadioButton(
-                    value: application.currentHousehold == value,
-                    onTap: () => application.updateCurrentHousehold(value),
-                    label: value.name,
-                  ),
-                );
-              }).toList(),
-            ),
-          ],
-        ),
         const SizedBox(height: 12.0),
-        const Text("B.3.2 Current Residence / Kasalukuyang tinitirhan (sa taong ito).",
+        CustomDropdown<SelectionOption>(
+          initialValue: application.currentHousehold,
+          value: application.currentHousehold,
+          label: "Household currently living in",
+          hintText: 'Select',
+          items: application.householdList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateCurrentHousehold,
+          validator: Commons.forcedDropdownValidator,
         ),
 
+        Text("Current Residence",
+          style: theme.textTheme.bodyMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        // Row(
+        //   children: [
+        //     SizedBox(
+        //         width: MediaQuery.of(context).size.width * 0.2,
+        //         child: const Text("B.3.1. Household Currently living in",)),
+        //     const SizedBox(width: 12.0),
+        //     Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       children: application.householdList.map((SelectionOption value) {
+        //         return Padding(
+        //           padding: const EdgeInsets.only(top: 12.0),
+        //           child: CustomRadioButton(
+        //             value: application.currentHousehold == value,
+        //             onTap: () => application.updateCurrentHousehold(value),
+        //             label: value.label,
+        //           ),
+        //         );
+        //       }).toList(),
+        //     ),
+        //   ],
+        // ),
         PrimaryTextField(
           fieldKey: Application.addressKey,
           controller: Application.address,
           hintText: "Address",
-          label: "a. House Number & Street of Barangay Zone/Purok",
+          label: "House Number & Street of Barangay Zone/Purok",
           validator: Commons.forcedTextValidator,
         ),
 
@@ -62,7 +84,7 @@ class ResidenceForm extends StatelessWidget {
           fieldKey: Application.barangayKey,
           controller: Application.barangay,
           hintText: "Barangay",
-          label: "b. Barangay",
+          label: "Barangay",
           validator: Commons.forcedTextValidator,
         ),
 
@@ -70,7 +92,7 @@ class ResidenceForm extends StatelessWidget {
           fieldKey: Application.cityKey,
           controller: Application.city,
           hintText: "City",
-          label: "c. City/Municipality",
+          label: "City/Municipality",
           validator: Commons.forcedTextValidator,
         ),
 
@@ -78,7 +100,7 @@ class ResidenceForm extends StatelessWidget {
           fieldKey: Application.provinceKey,
           controller: Application.province,
           hintText: "Province",
-          label: "d. Province",
+          label: "Province",
           validator: Commons.forcedTextValidator,
         ),
 
@@ -86,49 +108,51 @@ class ResidenceForm extends StatelessWidget {
           fieldKey: Application.regionKey,
           controller: Application.region,
           hintText: "Region",
-          label: "e. Region",
+          label: "Region",
           validator: Commons.forcedTextValidator,
         ),
 
         const SizedBox(height: 12.0),
 
-        const Text("B.3.3 Address of Family, if not living in the household of the family / "
-            "Tirahan ng pamilya, kung hindi nakatira ngayon na kasama ang pamilya",
+        Text("Address of Family, if not living in the household of the family",
+          style: theme.textTheme.bodyMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
 
         PrimaryTextField(
           fieldKey: Application.familyAddressKey,
           controller: Application.familyAddress,
           hintText: "Address",
-          label: "a. House Number & Street of Barangay Zone/Purok",
+          label: "House Number & Street of Barangay Zone/Purok",
         ),
 
         PrimaryTextField(
           fieldKey: Application.familyBarangayKey,
           controller: Application.familyBarangay,
           hintText: "Barangay",
-          label: "b. Barangay",
+          label: "Barangay",
         ),
 
         PrimaryTextField(
           fieldKey: Application.familyCityKey,
           controller: Application.familyCity,
           hintText: "City",
-          label: "c. City/Municipality",
+          label: "City/Municipality",
         ),
 
         PrimaryTextField(
           fieldKey: Application.familyProvinceKey,
           controller: Application.familyProvince,
           hintText: "Province",
-          label: "d. Province",
+          label: "Province",
         ),
 
         PrimaryTextField(
           fieldKey: Application.familyRegionKey,
           controller: Application.familyRegion,
           hintText: "Region",
-          label: "e. Region",
+          label: "Region",
         ),
       ],
     );

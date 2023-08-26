@@ -9,4 +9,12 @@ class Commons extends ChangeNotifier {
       return null;
     }
   }
+
+  static String? forcedDropdownValidator(value) {
+    if (value == null) {
+      return "This field is required";
+    } else {
+      return null;
+    }
+  }
 }

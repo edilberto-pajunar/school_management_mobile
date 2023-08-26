@@ -9,6 +9,7 @@ PersonalInfo personalInfoFromJson(String str) => PersonalInfo.fromJson(json.deco
 String personalInfoToJson(PersonalInfo data) => json.encode(data.toJson());
 
 class PersonalInfo {
+  bool hasLrn;
   String lrn;
   String lastName;
   String firstName;
@@ -18,10 +19,12 @@ class PersonalInfo {
   String dateOfBirth;
   String age;
   String gender;
+  bool isIndigenous;
   String motherTounge;
   String otherLanguage;
 
   PersonalInfo({
+    required this.hasLrn,
     required this.lrn,
     required this.lastName,
     required this.firstName,
@@ -31,11 +34,13 @@ class PersonalInfo {
     required this.dateOfBirth,
     required this.age,
     required this.gender,
+    required this.isIndigenous,
     required this.motherTounge,
     required this.otherLanguage,
   });
 
   factory PersonalInfo.fromJson(Map<String, dynamic> json) => PersonalInfo(
+    hasLrn: json["hasLrn"],
     lrn: json["lrn"],
     lastName: json["lastName"],
     firstName: json["firstName"],
@@ -45,11 +50,13 @@ class PersonalInfo {
     dateOfBirth: json["dateOfBirth"],
     age: json["age"],
     gender: json["gender"],
+    isIndigenous: json["isIndigenous"],
     motherTounge: json["motherTounge"],
     otherLanguage: json["otherLanguage"],
   );
 
   Map<String, dynamic> toJson() => {
+    "hasLrn": hasLrn,
     "lrn": lrn,
     "lastName": lastName,
     "firstName": firstName,

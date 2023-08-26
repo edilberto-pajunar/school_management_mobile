@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -15,7 +18,9 @@ import 'package:school_management/values/strings/api/key.dart';
 class StudentDB extends ChangeNotifier {
   
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  
+
+  final FirebaseStorage storage = FirebaseStorage.instance;
+
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
   bool isLoading = false;
@@ -91,7 +96,7 @@ class StudentDB extends ChangeNotifier {
     subjectStream = getSubject(context);
     notifyListeners();
   }
-  
+
 
   SubjectModel get stemGrades {
     Map<String, dynamic> practicalResearch1 = {
@@ -191,5 +196,44 @@ class StudentDB extends ChangeNotifier {
       throw "Error: ${e}";
     }
   }
+
+  String? filePath;
+  String? fileName;
+
+  Future<void> pickFile(BuildContext context) async {
+    await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ["jpeg", "png","jpg"],
+    ).then((value) {
+      if (value == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("No File Selected."),
+          ),
+        );
+      } else {
+        filePath = value.files.single.path;
+        fileName = value.files.single.name;
+        notifyListeners();
+      }
+    });
+  }
+
+
+  Future<void> uploadFileFirebase() async {
+    File file = File(filePath!);
+
+    try {
+    await storage.ref("test/$fileName")
+        .putFile(file)
+        .whenComplete(() {
+          debugPrint("Uploaded Succesfully");
+    });
+  } catch (e) {
+    throw "Error: ${e}";
+    }
+  }
+
 
 }

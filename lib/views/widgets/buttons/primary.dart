@@ -8,6 +8,7 @@ class PrimaryButton extends StatelessWidget {
     this.backgroundColor,
     this.color,
     this.icon,
+    this.isEnabled = true,
     super.key,
   });
 
@@ -16,13 +17,14 @@ class PrimaryButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? color;
   final Widget? icon;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: isEnabled ? onPressed : null,
       style: ElevatedButton.styleFrom(
         padding: const  EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
         backgroundColor: backgroundColor ?? ColorTheme.primaryRed,
@@ -40,6 +42,7 @@ class PrimaryButton extends StatelessWidget {
                 color: color ?? Colors.white,
                 fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
             icon!,
           ],
@@ -49,6 +52,7 @@ class PrimaryButton extends StatelessWidget {
           color: color ?? Colors.white,
           fontWeight: FontWeight.bold,
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_management/models/selection_option.dart';
+import 'package:school_management/services/networks/commons.dart';
 import 'package:school_management/services/networks/registration/application.dart';
-import 'package:school_management/views/widgets/buttons/check.dart';
+import 'package:school_management/views/widgets/buttons/dropdown.dart';
+import 'package:school_management/views/widgets/fields/dropdown.dart';
 import 'package:school_management/views/widgets/fields/primary.dart';
 
 class EmergencyForm extends StatelessWidget {
@@ -24,37 +27,82 @@ class EmergencyForm extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12.0),
-
-        const Text("B.2.1. Best Communication"),
-        const SizedBox(height: 12.0),
-        CustomCheckbox(
-          value: application.hasPhone,
-          onTap: () => application.updateCommunication(false),
-          option1: application.hasPhone
-              ? "May Sariling Cellphone"
-              : "Cellphone ng Magulang",
+        CustomDropdown<SelectionOption>(
+          initialValue: application.accessComm,
+          value: application.accessComm,
+          label: "Best Communication Access",
+          hintText: 'Select',
+          items: application.accessCommList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateAccessComm,
+          validator: Commons.forcedDropdownValidator,
         ),
 
-        PrimaryTextField(
-          fieldKey: Application.phoneNumberKey,
-          controller: Application.phoneNumber,
-          hintText: "Enter",
-          textInput: TextInputType.phone,
-          label: application.hasPhone
-              ? "No. ng Sariling CP"
-              : "No. ng CP ng magulang",
+        Visibility(
+          visible: application.accessComm != null,
+          child: PrimaryTextField(
+            fieldKey: Application.phoneNumberKey,
+            controller: Application.phoneNumber,
+            hintText: "Enter",
+            textInput: TextInputType.phone,
+            label: application.accessComm?.id == 0
+                ? "Enter your own cellphone number"
+                : "Enter the cellphone number of parents/relatives",
+          ),
         ),
 
         const SizedBox(height: 12.0),
-        const Text("B.2.2. Emergency Contact: Information / Tatawagan kung may Emergency",
+        Text("Emergency Contact: Information",
+          style: theme.textTheme.bodyMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
           softWrap: true,
         ),
 
         PrimaryTextField(
-          fieldKey: Application.emergencyNameKey,
-          controller: Application.emergencyName,
+          fieldKey: Application.emergencyFirstNameKey,
+          controller: Application.emergencyFirstName,
           hintText: "Enter",
-          label: "Pangalan",
+          label: "First Name",
+        ),
+
+        PrimaryTextField(
+          fieldKey: Application.emergencyMiddleNameKey,
+          controller: Application.emergencyMiddleName,
+          hintText: "Enter",
+          label: "Middle Name",
+        ),
+
+        PrimaryTextField(
+          fieldKey: Application.emergencyLastNameKey,
+          controller: Application.emergencyLastName,
+          hintText: "Enter",
+          label: "Last Name",
+        ),
+
+        CustomDropdown<SelectionOption>(
+          initialValue: application.relationship,
+          value: application.relationship,
+          label: "Relationship",
+          hintText: 'Select',
+          items: application.relationshipList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateRelationship,
+          validator: Commons.forcedDropdownValidator,
         ),
 
         PrimaryTextField(
@@ -62,13 +110,6 @@ class EmergencyForm extends StatelessWidget {
           controller: Application.emergencyAddress,
           hintText: "Enter",
           label: "Address",
-        ),
-
-        PrimaryTextField(
-          fieldKey: Application.relationKey,
-          controller: Application.relation,
-          hintText: "Enter",
-          label: "Relasyon (Magulang, kapatid, o iba pa.)",
         ),
 
         PrimaryTextField(

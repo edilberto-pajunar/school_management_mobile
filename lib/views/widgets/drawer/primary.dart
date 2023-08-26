@@ -41,14 +41,12 @@ class PrimaryDrawer extends StatelessWidget {
           ListTile(
             onTap: () {
               nav.pop(context);
-              nav.pop(context);
               nav.pushScreen(context, screen: const PersonalGradesScreen());
             },
             title: const Text("Grades"),
           ),
           ListTile(
             onTap: () {
-              nav.pop(context);
               nav.pop(context);
               nav.pushScreen(context, screen: const PersonalProfileScreen());
             },

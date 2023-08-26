@@ -59,10 +59,17 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: ColorTheme.primaryRed,
-          onPressed: () => nav.pushScreen(context, screen: const AddStudentInstructorScreen()),
-          child: const Icon(Icons.add),
+        floatingActionButton: StreamWrapper<List<StudentModel>>(
+          stream: db.studentsStream,
+          child: (students) {
+            return FloatingActionButton(
+              backgroundColor: ColorTheme.primaryRed,
+              onPressed: () => nav.pushScreen(context,
+                  screen: const AddStudentsScreen(
+              )),
+              child: const Icon(Icons.add),
+            );
+          }
         ),
         body: StreamWrapper<List<StudentModel>>(
           stream: db.studentsStream,
@@ -91,6 +98,42 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                               backgroundColor: Colors.white,
                               child: Image.asset(PngImages.user,
                                 color: ColorTheme.primaryRed,
+                              ),
+                            ),
+                            trailing: CircleAvatar(
+                              backgroundColor: ColorTheme.primaryRed,
+                              child: IconButton(
+                                onPressed: () {
+                                  showDialog(context: context, builder: (context) {
+                                    return AlertDialog(
+                                      content: Text("Are you sure you want to remove this student?",
+                                        style: theme.textTheme.bodyMedium,
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () async {
+                                            await db.deleteStudent(students[index].id, context);
+                                          },
+                                          child: Text("Yes",
+                                            style: theme.textTheme.bodyLarge!.copyWith(
+                                              color: ColorTheme.primaryRed,
+                                            ),
+                                          ),
+                                        ),
+                                        TextButton(onPressed: () {
+                                          nav.pop(context);
+                                        }, child: Text("No",
+                                            style: theme.textTheme.bodyLarge!.copyWith(
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                                },
+                                icon: const Icon(Icons.remove,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             title: Text(students[index].name,

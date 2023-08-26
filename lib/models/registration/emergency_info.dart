@@ -13,7 +13,8 @@ class EmergencyInfo {
   String number;
   String emergencyPerson;
   String emergencyAddress;
-  String relasyon;
+  String relationship;
+  String address;
   String contactNumber;
 
   EmergencyInfo({
@@ -21,7 +22,8 @@ class EmergencyInfo {
     required this.number,
     required this.emergencyPerson,
     required this.emergencyAddress,
-    required this.relasyon,
+    required this.relationship,
+    required this.address,
     required this.contactNumber,
   });
 
@@ -30,7 +32,8 @@ class EmergencyInfo {
     number: json["number"],
     emergencyPerson: json["emergencyPerson"],
     emergencyAddress: json["emergencyAddress"],
-    relasyon: json["Relasyon"],
+    relationship: json["relationship"],
+    address: json["address"],
     contactNumber: json["Contact Number"],
   );
 
@@ -39,7 +42,8 @@ class EmergencyInfo {
     "number": number,
     "emergencyPerson": emergencyPerson,
     "emergencyAddress": emergencyAddress,
-    "Relasyon": relasyon,
+    "relationship": relationship,
+    "address": address,
     "Contact Number": contactNumber,
   };
 }
