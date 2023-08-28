@@ -86,6 +86,7 @@ class EmergencyForm extends StatelessWidget {
           hintText: "Enter",
           label: "Last Name",
         ),
+        const SizedBox(height: 12.0),
 
         CustomDropdown<SelectionOption>(
           initialValue: application.relationship,

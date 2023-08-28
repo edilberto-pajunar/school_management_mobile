@@ -134,7 +134,7 @@ class FamilyInformationForm extends StatelessWidget {
         ),
         PrimaryTextField(
           fieldKey: Application.firstNamePrintedKey,
-          controller: Application.firstName,
+          controller: Application.firstNamePrinted,
           hintText: "First name",
           label: "First name",
           validator: Commons.forcedTextValidator,

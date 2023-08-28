@@ -11,7 +11,9 @@ import 'package:school_management/views/widgets/forms/residence.dart';
 import 'package:school_management/views/widgets/forms/school_info.dart';
 
 class IncomingJuniorFormScreen extends StatelessWidget {
-  const IncomingJuniorFormScreen({super.key});
+  const IncomingJuniorFormScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,13 @@ class IncomingJuniorFormScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            nav.pop(context);
+            application.clearForm();
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
         title: const Text("Application Form"),
       ),
       body: ModalProgressHUD(
@@ -37,12 +46,14 @@ class IncomingJuniorFormScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text("For Transferee in Junior High School",
+                    Text("For Incoming Grade 7 Enrollment Form",
                       style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SchoolInfoForm(),
+                    const SchoolInfoForm(
+                      isGrade7: true,
+                    ),
                     const BasicPersonalInfoForm(),
                     const EmergencyForm(),
                     const ResidenceForm(),

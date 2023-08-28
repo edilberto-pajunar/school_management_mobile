@@ -11,8 +11,8 @@ import 'package:school_management/views/widgets/forms/residence.dart';
 import 'package:school_management/views/widgets/forms/school_info.dart';
 
 
-class NewSeniorScreen extends StatelessWidget {
-  const NewSeniorScreen({super.key});
+class ContinuingSeniorScreen extends StatelessWidget {
+  const ContinuingSeniorScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class NewSeniorScreen extends StatelessWidget {
                       ),
                     ),
                     const SchoolInfoForm(
-                      newSenior: true,
+                      continueSenior: true,
                     ),
                     const BasicPersonalInfoForm(),
                     const EmergencyForm(),

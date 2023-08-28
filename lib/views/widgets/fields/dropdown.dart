@@ -158,7 +158,7 @@ class CustomDropdown<T> extends FormField<T> {
                 ),
                 const SizedBox(height: 4.0),
                 InkWell(
-                  onTap: onTap,
+                  onTap: enabled ? onTap : null,
                   borderRadius: BorderRadius.circular(12.0),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -181,6 +181,11 @@ class CustomDropdown<T> extends FormField<T> {
                           child: Text(value != null
                               ? items[items.indexWhere((SchoolDropdownMenuItem item) => item.value == value)].label
                               : hintText,
+                            style: value != null
+                                ? theme.textTheme.bodyMedium
+                                : theme.textTheme.bodyMedium!.copyWith(
+                              color: Colors.grey,
+                            )
                           ),
                         ),
                         const Padding(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_management/models/student/new_subject.dart';
 import 'package:school_management/models/student/student.dart';
-import 'package:school_management/models/student/subject.dart';
+import 'package:school_management/services/functions/show_dialog.dart';
 import 'package:school_management/services/networks/student/db.dart';
 import 'package:school_management/values/strings/colors.dart';
 import 'package:school_management/views/widgets/body/stream_wrapper.dart';
@@ -21,10 +22,12 @@ class _PersonalGradesScreenState extends State<PersonalGradesScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final StudentDB db = Provider.of<StudentDB>(context, listen: false);
-      db.updateSubjectStream(context);
       db.updateStudentModel(context);
+      db.updateSubjectStream(context);
     });
   }
+
+  final key = GlobalKey<State<Tooltip>>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +37,12 @@ class _PersonalGradesScreenState extends State<PersonalGradesScreen> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+        ),
         body: StreamWrapper<StudentModel>(
           stream: db.studentStream,
           child: (student) {
-            return StreamWrapper<List<SubjectModel>>(
+            return StreamWrapper<List<Subject>>(
               stream: db.subjectStream,
               child: (subjects) {
                 return SingleChildScrollView(
@@ -93,7 +97,7 @@ class _PersonalGradesScreenState extends State<PersonalGradesScreen> {
                                     decoration: BoxDecoration(
                                       color: ColorTheme.primaryRed,
                                     ),
-                                    child: Text("School Year 2223 First Semester",
+                                    child: Text("School Year ${DateTime.now().year} First Semester",
                                       style: theme.textTheme.bodyMedium!.copyWith(
                                         color: Colors.white,
                                       ),
@@ -122,7 +126,11 @@ class _PersonalGradesScreenState extends State<PersonalGradesScreen> {
                           ],
                         ),
                       ),
-                        const SizedBox(height: 24.0),
+                        const SizedBox(height: 12.0),
+                        Text("Click the subject to see overall grades",
+                          style: theme.textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 12.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -143,17 +151,47 @@ class _PersonalGradesScreenState extends State<PersonalGradesScreen> {
 
                             final subject = subjects[index];
 
-                            return  Container(
-                              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-                              decoration: BoxDecoration(
-                                color: index % 2 == 0 ? Colors.grey : Colors.white,
-                              ),
-                              child: CustomListTile(
-                                title: Text(subject.title,
-                                  style: theme.textTheme.titleSmall,
+                            double totalGrade = 0;
+                            double average = 0;
+
+                            for (var grade in subject.grades) {
+                              totalGrade += grade!.grade!;
+
+                              average = totalGrade / subject.grades.length;
+                            }
+
+
+                            return  InkWell(
+                              onTap: () {
+                                CustomShowDialog().showGradesDialog(context,
+                                  index: index,
+                                  subject: subject,
+
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0 ? Colors.grey : Colors.white,
                                 ),
-                                subtitle: Text("Unit No. ${subject.unit}"),
-                                trailing: Text("${subject.grade ?? "N/A"}"),
+                                child: CustomListTile(
+                                  title: Text(subject.name,
+                                    style: theme.textTheme.titleSmall!.copyWith(
+                                      color: index % 2 == 0 ? Colors.white : Colors.black,
+                                    ),
+                                  ),
+                                  subtitle: Text("Unit No. ${subject.units}",
+                                    style: theme.textTheme.bodyMedium!.copyWith(
+                                      color: index % 2 == 0 ? Colors.white : Colors.black,
+                                    ),
+                                  ),
+                                  trailing: Text("$average",
+                                    style: theme.textTheme.bodyLarge!.copyWith(
+                                      color: index % 2 == 0 ? Colors.white : Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
                             );
                           },

@@ -23,6 +23,9 @@ class SchoolInfo {
   bool isPsaSubmitted;
   String birthCertificate;
   String otherRequirements;
+  String? semester;
+  String? track;
+  String? strand;
 
   SchoolInfo({
     required this.schoolYear,
@@ -37,6 +40,9 @@ class SchoolInfo {
     required this.isPsaSubmitted,
     required this.birthCertificate,
     required this.otherRequirements,
+    this.semester,
+    this.track,
+    this.strand,
   });
 
   factory SchoolInfo.fromJson(Map<String, dynamic> json) => SchoolInfo(
@@ -52,6 +58,9 @@ class SchoolInfo {
     isPsaSubmitted: json["isPSASubmitted"] as bool,
     birthCertificate: json["birthCertificate"] as String,
     otherRequirements: json["otherRequirements"] as String,
+    semester: json["semester"] as String? ?? "",
+    track: json["track"] as String ? ?? "",
+    strand: json["strand"] as String? ?? "",
   );
 
   Map<String, dynamic> toJson() => {
@@ -67,5 +76,8 @@ class SchoolInfo {
     "isPSASubmitted": isPsaSubmitted,
     "birthCertificate": birthCertificate,
     "otherRequirements": otherRequirements,
+    "semester": semester,
+    "track": track,
+    "strand": strand,
   };
 }

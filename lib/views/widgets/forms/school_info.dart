@@ -7,8 +7,70 @@ import 'package:school_management/views/widgets/buttons/dropdown.dart';
 import 'package:school_management/views/widgets/fields/dropdown.dart';
 import 'package:school_management/views/widgets/fields/primary.dart';
 
-class SchoolInfoForm extends StatelessWidget {
-  const SchoolInfoForm({super.key});
+class SchoolInfoForm extends StatefulWidget {
+  const SchoolInfoForm({
+    this.isGrade7 = false,
+    this.continueJunior = false,
+    this.newSenior = false,
+    this.otherSchool = false,
+    this.continueSenior = false,
+    super.key,
+  });
+
+  final bool isGrade7;
+  final bool continueJunior;
+  final bool newSenior;
+  final bool otherSchool;
+  final bool continueSenior;
+
+  @override
+  State<SchoolInfoForm> createState() => _SchoolInfoFormState();
+}
+
+class _SchoolInfoFormState extends State<SchoolInfoForm> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final Application application = Provider.of<Application>(context, listen: false);
+      if (widget.isGrade7) {
+        application.updateGradeToEnroll(application.juniorGradeList[0]);
+      }
+
+      if (widget.continueJunior) {
+        application.updateResidence(application.otherResidenceList[1]);
+        Application.schoolName.text = "St.Jude Agro Industrial Secondary School";
+        Application.schoolID.text = "500844";
+        Application.schoolAddress.text = "Topas Proper Nabua, Camarines Sur";
+        application.updateSchoolType(application.schoolTypeList[1]);
+      }
+      
+      if (widget.newSenior) {
+        application.updateGradeToEnroll(application.seniorGradeList[0]);
+        application.updateLastGradeCompleted(application.seniorGradeList.last);
+        application.updateResidence(application.residenceList.last);
+        Application.schoolName.text = "St.Jude Agro Industrial Secondary School";
+        Application.schoolID.text = "500844";
+        Application.schoolAddress.text = "Topas Proper Nabua, Camarines Sur";
+        application.updateSchoolType(application.schoolTypeList[1]);
+        Application.track.text = "Academic";
+      }
+
+      if (widget.otherSchool) {
+        application.updateResidence(application.residenceList[0]);
+        Application.track.text = "Academic";
+      }
+
+      if (widget.continueSenior) {
+        application.updateGradeToEnroll(application.seniorGradeList[1]);
+        application.updateLastGradeCompleted(application.seniorGradeList.first);
+        application.updateResidence(application.residenceList[1]);
+        Application.track.text = "Academic";
+      }
+      
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,25 +104,53 @@ class SchoolInfoForm extends StatelessWidget {
           onChanged: application.updateSchoolYear,
           validator: Commons.forcedDropdownValidator,
         ),
-        Text("Grade Level to Enroll in:",
-          style: theme.textTheme.bodyLarge!.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
 
-        PrimaryTextField(
-          controller: TextEditingController(text: application.formLevel),
-          label: "Enter",
-          readOnly: true,
+        CustomDropdown<SelectionOption>(
+          initialValue: application.gradeToEnroll,
+          value: application.gradeToEnroll,
+          enabled: widget.isGrade7 ? false : !widget.newSenior,
+          label: "Grade Level to Enroll in:",
+          hintText: 'Select',
+          items: widget.newSenior || widget.continueSenior
+            ? application.seniorGradeList.map((SelectionOption option) {
+                return SchoolDropdownMenuItem<SelectionOption>(
+                  value: option,
+                  label: option.label,
+                  child: SchoolDropdown(
+                    option: option,
+                    ),
+                  );
+              }).toList()
+            : application.juniorGradeList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList(),
+          onChanged: application.updateGradeToEnroll,
+          validator: Commons.forcedDropdownValidator,
         ),
-        const SizedBox(height: 24.0),
 
         CustomDropdown<SelectionOption>(
           initialValue: application.lastGradeCompleted,
           value: application.lastGradeCompleted,
           label: "Last Grade Level Completed",
+          enabled: !widget.newSenior,
           hintText: 'Select',
-          items: application.gradeLevelList.map((SelectionOption option) {
+          items: widget.newSenior || widget.continueSenior
+              ? application.seniorGradeList.map((SelectionOption option) {
+            return SchoolDropdownMenuItem<SelectionOption>(
+              value: option,
+              label: option.label,
+              child: SchoolDropdown(
+                option: option,
+              ),
+            );
+          }).toList()
+              : application.juniorGradeList.map((SelectionOption option) {
             return SchoolDropdownMenuItem<SelectionOption>(
               value: option,
               label: option.label,
@@ -96,20 +186,30 @@ class SchoolInfoForm extends StatelessWidget {
           value: application.residence,
           label: "Residency",
           hintText: 'Select',
-          items: application.residenceList.map((SelectionOption option) {
-            return SchoolDropdownMenuItem<SelectionOption>(
-              value: option,
-              label: option.label,
-              child: SchoolDropdown(
-                option: option,
-              ),
-            );
-          }).toList(),
-          onChanged: application.updateResidence,
-          validator: Commons.forcedDropdownValidator,
+          items: widget.continueJunior
+            ? application.otherResidenceList.map((SelectionOption option) {
+                return SchoolDropdownMenuItem<SelectionOption>(
+                  value: option,
+                  label: option.label,
+                child: SchoolDropdown(
+                      option: option,
+                    ),
+                  );
+                }).toList()
+            : application.residenceList.map((SelectionOption option) {
+              return SchoolDropdownMenuItem<SelectionOption>(
+                value: option,
+                label: option.label,
+                child: SchoolDropdown(
+                  option: option,
+                ),
+              );
+            }).toList(),
+            onChanged: application.updateResidence,
+            validator: Commons.forcedDropdownValidator,
         ),
 
-        Text("INFORMATION ON SCHOOL LAST ATTENDED",
+        Text("INFORMATION ON SCHOOL LAffST ATTENDED",
           softWrap: true,
           style: theme.textTheme.bodyLarge!.copyWith(
             fontWeight: FontWeight.bold,
@@ -119,6 +219,7 @@ class SchoolInfoForm extends StatelessWidget {
         PrimaryTextField(
           fieldKey: Application.schoolNameKey,
           controller: Application.schoolName,
+          readOnly: widget.continueJunior,
           hintText: "Name of School",
           label: "Name of school",
           validator: Commons.forcedTextValidator,
@@ -127,6 +228,7 @@ class SchoolInfoForm extends StatelessWidget {
         PrimaryTextField(
           fieldKey: Application.schoolIDKey,
           controller: Application.schoolID,
+          readOnly: widget.continueJunior,
           hintText: "School ID",
           label: "School ID",
           validator: Commons.forcedTextValidator,
@@ -135,6 +237,7 @@ class SchoolInfoForm extends StatelessWidget {
         PrimaryTextField(
           fieldKey: Application.schoolAddressKey,
           controller: Application.schoolAddress,
+          readOnly: widget.continueJunior,
           hintText: "School Address",
           label: "School Address",
           validator: Commons.forcedTextValidator,
@@ -144,6 +247,7 @@ class SchoolInfoForm extends StatelessWidget {
         CustomDropdown<SelectionOption>(
           initialValue: application.schoolType,
           value: application.schoolType,
+          enabled: !widget.continueJunior,
           label: "School Type",
           hintText: 'Select',
           items: application.schoolTypeList.map((SelectionOption option) {
@@ -204,6 +308,58 @@ class SchoolInfoForm extends StatelessWidget {
           onChanged: application.updateOtherRequirements,
           validator: Commons.forcedDropdownValidator,
         ),
+
+        Visibility(
+          visible: widget.newSenior || widget.otherSchool,
+          child: Column(
+            children: [
+              CustomDropdown<SelectionOption>(
+                initialValue: application.semester,
+                value: application.semester,
+                label: "Semester",
+                hintText: 'Select',
+                items: application.semesterList.map((SelectionOption option) {
+                  return SchoolDropdownMenuItem<SelectionOption>(
+                    value: option,
+                    label: option.label,
+                    child: SchoolDropdown(
+                      option: option,
+                    ),
+                  );
+                }).toList(),
+                onChanged: application.updateSemester,
+                validator: Commons.forcedDropdownValidator,
+              ),
+
+              PrimaryTextField(
+                controller: Application.track,
+                label: "Track",
+                validator: Commons.forcedTextValidator,
+              ),
+              const SizedBox(height: 12.0),
+
+              CustomDropdown<SelectionOption>(
+                initialValue: application.strand,
+                value: application.strand,
+                label: "Strand",
+                hintText: 'Select',
+                items: application.strandList.map((SelectionOption option) {
+                  return SchoolDropdownMenuItem<SelectionOption>(
+                    value: option,
+                    label: option.label,
+                    child: SchoolDropdown(
+                      option: option,
+                    ),
+                  );
+                }).toList(),
+                onChanged: application.updateStrand,
+                validator: Commons.forcedDropdownValidator,
+              ),
+            ],
+          ),
+        ),
+
+
       ],
     );
   }

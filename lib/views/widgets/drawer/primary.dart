@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:school_management/services/networks/auth/auth.dart';
 import 'package:school_management/services/networks/navigation.dart';
 import 'package:school_management/values/strings/images.dart';
+import 'package:school_management/views/screens/student/enrollment.dart';
 import 'package:school_management/views/screens/student/grades.dart';
 import 'package:school_management/views/screens/student/home.dart';
 import 'package:school_management/views/screens/student/profile.dart';
@@ -35,7 +36,10 @@ class PrimaryDrawer extends StatelessWidget {
             title: const Text("Home"),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              nav.pop(context);
+              nav.pushScreen(context, screen: const StudentEnrollmentScreen());
+            },
             title: const Text("Enrollment"),
           ),
           ListTile(

@@ -9,6 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
+import 'package:school_management/models/registration/application.dart';
+import 'package:school_management/models/student/new_subject.dart';
 import 'package:school_management/models/student/student.dart';
 import 'package:school_management/models/student/subject.dart';
 import 'package:school_management/services/networks/auth/auth.dart';
@@ -51,7 +53,7 @@ class StudentDB extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// [studentStream] will get the info of the student
+  /// [studentStream] will get the info home of the student
   Stream<StudentModel>? studentStream;
   
   Stream<StudentModel> getUserInfo(BuildContext context) {
@@ -63,7 +65,23 @@ class StudentDB extends ChangeNotifier {
   }
 
   StudentModel _studentFromSnapshots(DocumentSnapshot snapshot) {
-    return StudentModel.fromJson(snapshot.data() as Map<String, dynamic>);
+    final Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+    final fullName = "${data["personalInfo"]["firstName"]}${data["personalInfo"]["lastName"]}";
+    final grade = "${data["schoolInfo"]["gradeToEnroll"]}";
+    final id = firebaseAuth.currentUser!.uid;
+    final controlNumber = data["controlNumber"];
+    final lrn = "${data["personalInfo"]["lrn"]}";
+
+    final student = StudentModel(
+        name: fullName,
+        grade: grade,
+        id: id,
+        section: "A",
+        controlNumber: controlNumber,
+        lrn: lrn,
+    );
+    return student;
   }
 
   void updateStudentModel(BuildContext context) {
@@ -71,11 +89,55 @@ class StudentDB extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [studentStream] will get the profile of the student
+  Stream<ApplicationInfo>? studentProfileStream;
+
+  Stream<ApplicationInfo> getUserProfile(BuildContext context) {
+    final Auth auth = Provider.of<Auth>(context, listen: false);
+
+    return db.collection(auth.author!)
+        .doc(firebaseAuth.currentUser!.uid)
+        .snapshots().map(_studentProfileFromSnapshots);
+  }
+
+  ApplicationInfo _studentProfileFromSnapshots(DocumentSnapshot snapshot) {
+    final Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+    return ApplicationInfo.fromJson(data);
+  }
+
+  void updateStudentProfileStream(BuildContext context) {
+    studentProfileStream = getUserProfile(context);
+    notifyListeners();
+  }
+
+  bool hidePersonal = false;
+
+  void updateHidePersonal() {
+    hidePersonal = !hidePersonal;
+    notifyListeners();
+  }
+
+  bool hideContact = false;
+
+  void updateHideContact() {
+    hideContact = !hideContact;
+    notifyListeners();
+  }
+
+  bool canEdit = false;
+
+  void updateCanEdit() {
+    canEdit = !canEdit;
+    notifyListeners();
+  }
+
+
   /// [subjectStream] will generate the subjects of
   /// the student current log in
-  Stream<List<SubjectModel>>? subjectStream;
+  Stream<List<Subject>>? subjectStream;
 
-  Stream<List<SubjectModel>> getSubject(BuildContext context) {
+  Stream<List<Subject>> getSubject(BuildContext context) {
     final Auth auth = Provider.of<Auth>(context, listen: false);
 
     final subjectStream = db.collection(auth.author!)
@@ -86,9 +148,9 @@ class StudentDB extends ChangeNotifier {
     return subjectStream;
   }
 
-  List<SubjectModel> _subjectFromSnapshots(QuerySnapshot snapshot) {
+  List<Subject> _subjectFromSnapshots(QuerySnapshot snapshot) {
     return snapshot.docs.map((QueryDocumentSnapshot doc) {
-      return SubjectModel.fromJson(doc.data() as Map<String, dynamic>);
+      return Subject.fromMap(doc.data() as Map<String, dynamic>);
     }).toList();
   }
 
@@ -96,6 +158,25 @@ class StudentDB extends ChangeNotifier {
     subjectStream = getSubject(context);
     notifyListeners();
   }
+
+  Future<void> updateSubjectEnrollment(BuildContext context, String uid) async {
+    final Auth auth = Provider.of<Auth>(context, listen: false);
+
+    await db.collection(auth.author!)
+      .doc(firebaseAuth.currentUser!.uid)
+      .collection("subjects")
+      .doc(uid)
+      .update({
+        "enrolled": true,
+      }).then((value) {
+        showDialog(context: context, builder: (context) {
+          return const AlertDialog(
+            content: Text("Congrats! You are enrolled."),
+          );
+        });
+    });
+  }
+
 
 
   SubjectModel get stemGrades {

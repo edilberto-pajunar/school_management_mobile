@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +11,8 @@ import 'package:school_management/models/registration/personal_info.dart';
 import 'package:school_management/models/registration/residence_info.dart';
 import 'package:school_management/models/registration/school_info.dart';
 import 'package:school_management/models/selection_option.dart';
+import 'package:school_management/models/student/new_subject.dart';
+import 'package:school_management/services/networks/commons.dart';
 
 class Application extends ChangeNotifier {
 
@@ -18,12 +23,12 @@ class Application extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? formLevel;
-
-  void updateFormLevel(String? value) {
-    formLevel = value;
-    notifyListeners();
-  }
+  // String? formLevel;
+  //
+  // void updateFormLevel(String? value) {
+  //   formLevel = value;
+  //   notifyListeners();
+  // }
 
 
   final List<SelectionOption> schoolYearList = const [
@@ -46,6 +51,27 @@ class Application extends ChangeNotifier {
     notifyListeners();
   }
 
+  final List<SelectionOption> juniorGradeList = const [
+    SelectionOption(id: 0, label: "Grade 7"),
+    SelectionOption(id: 1, label: "Grade 8"),
+    SelectionOption(id: 2, label: "Grade 9"),
+    SelectionOption(id: 3, label: "Grade 10"),
+  ];
+
+  final List<SelectionOption> seniorGradeList = const [
+    SelectionOption(id: 0, label: "Grade 11"),
+    SelectionOption(id: 1, label: "Grade 12"),
+    SelectionOption(id: 2, label: "Grade 9"),
+    SelectionOption(id: 3, label: "Grade 10"),
+  ];
+
+  SelectionOption? gradeToEnroll;
+
+  void updateGradeToEnroll(SelectionOption? value) {
+    gradeToEnroll = value;
+    notifyListeners();
+  }
+
   // SelectionOption? assignedLRN;
   //
   // void updateAssignedLRN(SelectionOption? value) {
@@ -62,8 +88,8 @@ class Application extends ChangeNotifier {
 
   static GlobalKey<FormState> formKey = GlobalKey();
 
-  static TextEditingController gradeToEnroll = TextEditingController();
-  static GlobalKey<FormFieldState> gradeToEnrollKey = GlobalKey();
+  // static TextEditingController gradeToEnroll = TextEditingController();
+  // static GlobalKey<FormFieldState> gradeToEnrollKey = GlobalKey();
 
   final List<SelectionOption> gradeLevelList = const [
     SelectionOption(id: 0, label: "Grade 1"),
@@ -98,6 +124,11 @@ class Application extends ChangeNotifier {
   final List<SelectionOption> residenceList = const [
     SelectionOption(id: 0, label: "New"),
     SelectionOption(id: 1, label: "Returning"),
+  ];
+
+  final List<SelectionOption> otherResidenceList = const [
+    SelectionOption(id: 0, label: "New"),
+    SelectionOption(id: 1, label: "Continouing"),
   ];
 
   SelectionOption? residence;
@@ -179,6 +210,34 @@ class Application extends ChangeNotifier {
   //   notifyListeners();
   // }
 
+  final List<SelectionOption> semesterList = const [
+    SelectionOption(id: 0, label: "1st Semester"),
+    SelectionOption(id: 1, label: "2nd Semester"),
+  ];
+
+  SelectionOption? semester;
+
+  void updateSemester(SelectionOption? value) {
+    semester = value;
+    notifyListeners();
+  }
+
+  static TextEditingController track = TextEditingController();
+  static GlobalKey<FormFieldState> trackKey = GlobalKey();
+
+  final List<SelectionOption> strandList = const [
+    SelectionOption(id: 0, label: "GAS(General Academic Strand)"),
+    SelectionOption(id: 1, label: "STEM(Science, Technology, Engineering and Mathematics)"),
+    SelectionOption(id: 2, label: "HUMMS(Humanities and Social Sciences)"),
+  ];
+
+  SelectionOption? strand;
+
+  void updateStrand(SelectionOption? value) {
+    strand = value;
+    notifyListeners();
+  }
+
   static TextEditingController birthCertNumber = TextEditingController();
   static GlobalKey<FormFieldState> birthCertNumberKey = GlobalKey();
 
@@ -210,12 +269,14 @@ class Application extends ChangeNotifier {
   static TextEditingController dateOfBirth = TextEditingController();
   static GlobalKey<FormFieldState> dateOfBirthKey = GlobalKey();
 
+  DateTime? birthDay;
+
   Future<void> updateBirthDate(BuildContext context) async {
     DateTime? birthDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now().subtract(const Duration(days: 6570)),
-      firstDate: DateTime.now().subtract(const Duration(days: 37620)),
-      lastDate: DateTime.now().subtract(const Duration(days: 6570)),
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now().subtract(const Duration(days: 50000)),
+      lastDate: DateTime.now(),
       initialEntryMode: DatePickerEntryMode.calendarOnly,
     );
 
@@ -223,6 +284,7 @@ class Application extends ChangeNotifier {
 
     if (birthDate != null) {
       DateTime enteredDate = birthDate;
+      birthDay = birthDate;
       // DateTime currentDate = DateTime.now();
 
       dateOfBirth.text = DateFormat("MM/dd/yyyy").format(enteredDate);
@@ -457,10 +519,9 @@ class Application extends ChangeNotifier {
   Future<void> updateDateEntered(BuildContext context) async {
     DateTime? birthDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now().subtract(const Duration(days: 6570)),
-      firstDate: DateTime.now().subtract(const Duration(days: 37620)),
-      lastDate: DateTime.now().subtract(const Duration(days: 6570)),
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now().subtract(const Duration(days: 50000)),
+      lastDate: DateTime.now(),
     );
 
     // DateFormat format = DateFormat('MM/dd/yyyy');
@@ -481,7 +542,7 @@ class Application extends ChangeNotifier {
   SchoolInfo get getSchoolInfo {
     final SchoolInfo schoolInfo = SchoolInfo(
         schoolYear: schoolYear!.label,
-        gradeToEnroll: formLevel!,
+        gradeToEnroll: gradeToEnroll!.label,
         lastGradeCompleted: lastGradeCompleted!.label,
         lastSchoolYear: lastSchoolYearCompleted!.label,
         residency: residence!.label,
@@ -492,6 +553,9 @@ class Application extends ChangeNotifier {
         isPsaSubmitted: submitCopyPSA!.id == 0 ? true : false,
         birthCertificate: birthCertNumber.text,
         otherRequirements: otherRequirements!.label,
+        semester: semester?.label,
+        track: track.text,
+        strand: strand?.label,
     );
 
     return schoolInfo;
@@ -562,8 +626,35 @@ class Application extends ChangeNotifier {
     return residenceInfo;
   }
 
+  String getRandomLetter() {
+    Random random = Random();
+    int randomAscii = random.nextInt(26) + 65; // ASCII code for capital letters (A-Z)
+    String randomLetter = String.fromCharCode(randomAscii);
+    return randomLetter;
+  }
+
+  int getRandomNumber() {
+    Random random = Random();
+    int randomNumber = random.nextInt(100); // Generate a random number between 0 and 99
+    return randomNumber;
+  }
+
+  String generateRandomPassword() {
+    Random random = Random();
+    const String alphanumericChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    String password = '';
+
+    for (int i = 0; i < 6; i++) {
+      int randomIndex = random.nextInt(alphanumericChars.length);
+      password += alphanumericChars[randomIndex];
+    }
+
+    return password;
+  }
+
   Future<void> submitApplicationForm(BuildContext context) async {
     final ThemeData theme = Theme.of(context);
+    final FirebaseAuth auth = FirebaseAuth.instance;
     showHUD(true);
 
     try {
@@ -574,7 +665,31 @@ class Application extends ChangeNotifier {
         residenceInfo: getResidenceInfo,
       );
 
-      await db.collection("forms").doc().set(applicationInfo.toJson());
+      final birth = DateFormat("MMyyyy").format(birthDay!).trim();
+
+      final String controlNumber = "${getRandomLetter()}${getRandomNumber()}$birth";
+      final String password = generateRandomPassword();
+
+      await auth.createUserWithEmailAndPassword(
+        email: "$controlNumber@gmail.com",
+        password: password,
+      ).then((value) {
+        db.collection("students").doc(value.user!.uid).set({
+          "id": value.user!.uid,
+          "controlNumber": controlNumber,
+          "password": password,
+          ...applicationInfo.toJson(),
+        });
+
+        final CollectionReference subjectsCollection = db.collection("students")
+            .doc(value.user!.uid)
+            .collection("subjects");
+
+        for (Subject subject in Commons.juniorSubject) {
+           subjectsCollection.doc(subject.id.toString()).set(subject.toMap());
+        }
+      });
+
       clearForm();
       showHUD(false);
 
@@ -599,18 +714,24 @@ class Application extends ChangeNotifier {
 
   void clearForm() {
     schoolYear = null;
-    newResidency = false;
-    gradeToEnroll.clear();
+    gradeToEnroll = null;
     lastGradeCompleted = null;
     lastSchoolYearCompleted = null;
+    residence = null;
+    semester = null;
+    track.clear();
+    strand = null;
+
+
     schoolName.clear();
     schoolID.clear();
     schoolAddress.clear();
     schoolType = null;
     submitCopyPSA = null;
     birthCertNumber.clear();
-    // passForm137 = false;
-    // passForm138 = false;
+    otherRequirements = null;
+
+    hasLRN = null;
     learningReferenceNumber.clear();
     lastName.clear();
     firstName.clear();
@@ -621,16 +742,15 @@ class Application extends ChangeNotifier {
     age.clear();
     gender = null;
     isIndigenousPeople = null;
-    indigenousGroup.clear();
     motherTounge.clear();
     otherLanguages.clear();
-    hasPhone = false;
+    accessComm = null;
     phoneNumber.clear();
     emergencyFirstName.clear();
     emergencyMiddleName.clear();
     emergencyLastName.clear();
-    emergencyAddress.clear();
     relationship = null;
+    emergencyAddress.clear();
     emergencyPhone.clear();
     currentHousehold = null;
     address.clear();
@@ -646,6 +766,14 @@ class Application extends ChangeNotifier {
     status = null;
     numberOfBrother.clear();
     numberOfSister.clear();
+    birthOrder.clear();
+    is4psBeneficiary = null;
+    whenBeneficiary.clear();
+    lastNamePrinted.clear();
+    firstNamePrinted.clear();
+    middleNamePrinted.clear();
+    learnerRelation.clear();
+    dateEntered.clear();
     notifyListeners();
   }
 
