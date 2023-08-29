@@ -147,15 +147,6 @@ class BasicPersonalInfoForm extends StatelessWidget {
           validator: Commons.forcedDropdownValidator,
         ),
 
-        Visibility(
-          visible: application.gender?.id == 2,
-          child: PrimaryTextField(
-            fieldKey: Application.otherGenderKey,
-            controller: Application.otherGender,
-            hintText: "Gender",
-            label: "Others (Specify)",
-          ),
-        ),
 
         const SizedBox(height: 12.0),
 

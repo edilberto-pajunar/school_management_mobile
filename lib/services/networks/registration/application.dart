@@ -13,6 +13,8 @@ import 'package:school_management/models/registration/school_info.dart';
 import 'package:school_management/models/selection_option.dart';
 import 'package:school_management/models/student/new_subject.dart';
 import 'package:school_management/services/networks/commons.dart';
+import 'package:http/http.dart' as http;
+import 'package:school_management/values/strings/api/key.dart';
 
 class Application extends ChangeNotifier {
 
@@ -304,7 +306,6 @@ class Application extends ChangeNotifier {
   final List<SelectionOption> genderList = const [
     SelectionOption(id: 0, label: "Male"),
     SelectionOption(id: 1, label: "Female"),
-    SelectionOption(id: 2, label: "Others"),
   ];
 
   void updateGender(SelectionOption? value) {
@@ -652,7 +653,10 @@ class Application extends ChangeNotifier {
     return password;
   }
 
-  Future<void> submitApplicationForm(BuildContext context) async {
+  Future<void> submitApplicationForm(BuildContext context, {
+    bool isJunior = false,
+    bool isSenior = false,
+  }) async {
     final ThemeData theme = Theme.of(context);
     final FirebaseAuth auth = FirebaseAuth.instance;
     showHUD(true);
@@ -671,26 +675,35 @@ class Application extends ChangeNotifier {
       final String password = generateRandomPassword();
 
       await auth.createUserWithEmailAndPassword(
-        email: "$controlNumber@gmail.com",
+        email: "$controlNumber@gmail.com".toLowerCase(),
         password: password,
       ).then((value) {
         db.collection("students").doc(value.user!.uid).set({
           "id": value.user!.uid,
-          "controlNumber": controlNumber,
+          "controlNumber": controlNumber.toLowerCase(),
           "password": password,
           ...applicationInfo.toJson(),
         });
+
+        // send the account to the number
+        sendSMS(
+          controlNumber: controlNumber,
+          password: password,
+        );
 
         final CollectionReference subjectsCollection = db.collection("students")
             .doc(value.user!.uid)
             .collection("subjects");
 
-        for (Subject subject in Commons.juniorSubject) {
-           subjectsCollection.doc(subject.id.toString()).set(subject.toMap());
+        if (isJunior) {
+          for (Subject subject in Commons.juniorSubject) {
+            subjectsCollection.doc(subject.id.toString()).set(subject.toMap());
+          }
         }
+
       });
 
-      clearForm();
+      // clearForm();
       showHUD(false);
 
     } catch (e) {
@@ -775,6 +788,40 @@ class Application extends ChangeNotifier {
     learnerRelation.clear();
     dateEntered.clear();
     notifyListeners();
+  }
+
+
+  Future<void> sendSMS({
+    required String controlNumber,
+    required String password,
+}) async {
+    final Uri uri = Uri.https("api.movider.co", "/v1/sms", {
+
+    });
+    
+    await http.post(uri, body: {
+      "api_key": ApiKey.smsApiKey,
+      "api_secret": ApiKey.smsSecretApiKey,
+      "to": phoneNumber.text,
+      "text": "Your account is: Control number: $controlNumber and Password: $password",
+    },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Accept": "application/json",
+      }
+    ).then((http.Response response) {
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        debugPrint(response.body);
+      } else {
+        throw "Something went wrong. Please try again.";
+      }
+    }).timeout(const Duration(seconds: 30),
+        onTimeout: () {
+          throw "Time exceeded.";
+        }).onError((error, stackTrace) {
+       debugPrint("Error: $error");
+       debugPrint("Stacktrace: $stackTrace");
+    });
   }
 
 }

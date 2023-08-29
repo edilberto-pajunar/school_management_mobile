@@ -6,8 +6,10 @@ import 'package:school_management/models/instructor/instructor.dart';
 import 'package:school_management/models/student/student.dart';
 import 'package:school_management/services/networks/auth/auth.dart';
 import 'package:school_management/services/networks/instructor/db.dart';
+import 'package:school_management/services/networks/navigation.dart';
 import 'package:school_management/services/networks/student/db.dart';
 import 'package:school_management/values/strings/colors.dart';
+import 'package:school_management/views/screens/admin/students.dart';
 import 'package:school_management/views/widgets/body/stream_wrapper.dart';
 import 'package:school_management/views/widgets/drawer/admin.dart';
 import 'package:school_management/views/widgets/tiles/grey.dart';
@@ -41,6 +43,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     final InstructorDB instructorDB = Provider.of<InstructorDB>(context);
 
     final String date = DateFormat("MMMM-dd-yyyy").format(DateTime.now());
+    final NavigationServices nav = NavigationServices();
 
 
     return SafeArea(
@@ -96,30 +99,33 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: GreyTile(
-                              backgroundColor: Colors.black,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text("${students!.length}",
-                                    style: theme.textTheme.titleMedium!.copyWith(
-                                      color: Colors.white,
+                            child: InkWell(
+                              onTap: () => nav.pushScreen(context, screen: const AdminStudentsScreen()),
+                              child: GreyTile(
+                                backgroundColor: Colors.black,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text("${students!.length}",
+                                      style: theme.textTheme.titleMedium!.copyWith(
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 4.0),
-                                  Text("Total Students",
-                                    style: theme.textTheme.bodyLarge!.copyWith(
-                                      color: Colors.white,
+                                    const SizedBox(height: 4.0),
+                                    Text("Total Students",
+                                      style: theme.textTheme.bodyLarge!.copyWith(
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 50.0),
-                                  LinearPercentIndicator(
-                                    percent: students.length / 100,
-                                    barRadius: const Radius.circular(12),
-                                    lineHeight: 12,
-                                    backgroundColor: Colors.white,
-                                  ),
-                                ],
+                                    const SizedBox(height: 50.0),
+                                    LinearPercentIndicator(
+                                      percent: students.length / 100,
+                                      barRadius: const Radius.circular(12),
+                                      lineHeight: 12,
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

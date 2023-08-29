@@ -33,8 +33,7 @@ class NewSeniorScreen extends StatelessWidget {
         title: const Text("Application Form"),
       ),
       body: ModalProgressHUD(
-        // inAsyncCall: application.isLoading,
-        inAsyncCall: false,
+        inAsyncCall: application.isLoading,
         child: Form(
           key: Application.formKey,
           child: SafeArea(
@@ -61,7 +60,10 @@ class NewSeniorScreen extends StatelessWidget {
                     PrimaryButton(
                       onPressed: () async {
                         if (Application.formKey.currentState!.validate()) {
-                          await application.submitApplicationForm(context).then((value) {
+                          await application.submitApplicationForm(context,
+                            isSenior: true,
+
+                          ).then((value) {
                             nav.pop(context);
                             showDialog(context: context, builder: (context) {
                               return AlertDialog(

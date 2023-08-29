@@ -5,6 +5,7 @@ class StudentModel {
   String id;
   String? lrn;
   String section;
+  String? password;
 
   StudentModel({
     this.controlNumber,
@@ -13,6 +14,7 @@ class StudentModel {
     required this.id,
     this.lrn,
     required this.section,
+    this.password,
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
@@ -22,6 +24,7 @@ class StudentModel {
     id: json["id"],
     lrn: json["lrn"],
     section: json["section"],
+    password: json["birthDay"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -31,5 +34,6 @@ class StudentModel {
     "id": id,
     "lrn": lrn,
     "section": section,
+    "birthDay": password,
   };
 }

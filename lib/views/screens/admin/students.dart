@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pie_chart/pie_chart.dart';
 import 'package:provider/provider.dart';
 import 'package:school_management/models/student/student.dart';
-import 'package:school_management/services/networks/instructor/db.dart';
+import 'package:school_management/services/networks/student/db.dart';
 import 'package:school_management/views/widgets/body/stream_wrapper.dart';
 
 class AdminStudentsScreen extends StatefulWidget {
@@ -18,54 +17,67 @@ class _AdminStudentsScreenState extends State<AdminStudentsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final InstructorDB db = Provider.of<InstructorDB>(context, listen: false);
-      db.updateStudentsStream();
+      final StudentDB db = Provider.of<StudentDB>(context, listen: false);
+      db.updateListOfStudentsStream();
     });
   }
 
   @override
   Widget build(BuildContext context) {
 
-    final ThemeData theme = Theme.of(context);
-    final InstructorDB db = Provider.of<InstructorDB>(context);
+    final StudentDB studentDB = Provider.of<StudentDB>(context);
 
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: StreamWrapper<List<StudentModel>>(
-        stream: db.studentsStream,
-        child: (students) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Number of students in each grade",
-                style: theme.textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24.0),
-              PieChart(
-                animationDuration: const Duration(milliseconds: 800),
-                chartRadius: MediaQuery.of(context).size.width * 0.5,
-                chartLegendSpacing: 20,
-                  legendOptions: const LegendOptions(
-                    showLegendsInRow: false,
-                    legendPosition: LegendPosition.bottom,
-                    showLegends: true,
-                    legendShape: BoxShape.circle,
-                    legendTextStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(),
+        body: StreamWrapper<List<StudentModel>>(
+          stream: studentDB.listOfStudentsStream,
+          child: (student) {
+            return Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  DataTable(
+                    columnSpacing: 5,
+                    columns: const [
+                      DataColumn(
+                        label: Text("User")
+                      ),
+                      DataColumn(
+                          label: SizedBox(
+                            width: 100,
+                            child: Text("Control Number",
+                              softWrap: true,
+                            ),
+                          )
+                      ),
+                      DataColumn(
+                          label: Text("Password")
+                      ),
+                    ],
+                    rows: student!.map((e) {
+                      return DataRow(
+                        cells: [
+                          DataCell(
+                            Text(e.name)
+                          ),
+                          DataCell(
+                              Text("${e.controlNumber}",)
+                          ),
+                          DataCell(
+                              Text("${e.password}",)
+                          ),
+                        ]
+                      );
+                    }).toList(),
                   ),
-
-                dataMap: {
-                  "": 3,
-                  "iron": 2,
-                }
+                ],
               ),
-            ],
-          );
-        }
+            );
+          }
+        ),
       ),
     );
   }

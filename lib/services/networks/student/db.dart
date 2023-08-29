@@ -44,7 +44,26 @@ class StudentDB extends ChangeNotifier {
 
   List<StudentModel> _listOfStudentsFromSnapshots(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
-      return StudentModel.fromJson(doc.data() as Map<String, dynamic>);
+      final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+      final fullName = "${data["personalInfo"]["firstName"]} ${data["personalInfo"]["lastName"]}";
+      final grade = "${data["schoolInfo"]["gradeToEnroll"]}";
+      final id = firebaseAuth.currentUser!.uid;
+      final controlNumber = data["controlNumber"];
+      final lrn = "${data["personalInfo"]["lrn"]}";
+      final password = data["password"];
+
+      final student = StudentModel(
+        name: fullName,
+        grade: grade,
+        id: id,
+        section: "A",
+        controlNumber: controlNumber,
+        lrn: lrn,
+        password: password,
+      );
+
+      return student;
     }).toList();
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:school_management/models/selection_option.dart';
 import 'package:school_management/services/networks/commons.dart';
@@ -15,6 +16,8 @@ class EmergencyForm extends StatelessWidget {
 
     final Application application = Provider.of<Application>(context);
     final ThemeData theme = Theme.of(context);
+
+    // final phoneNumberPattern = RegExp(r'^\+639\d{9}$');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -50,11 +53,23 @@ class EmergencyForm extends StatelessWidget {
           child: PrimaryTextField(
             fieldKey: Application.phoneNumberKey,
             controller: Application.phoneNumber,
-            hintText: "Enter",
+            hintText: "+63XXXXXXXXXX",
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             textInput: TextInputType.phone,
             label: application.accessComm?.id == 0
                 ? "Enter your own cellphone number"
                 : "Enter the cellphone number of parents/relatives",
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "This field is required";
+              } else if (value[0] == "0") {
+                return "Please start with 63";
+              } else {
+                return null;
+              }
+            },
           ),
         ),
 
