@@ -175,9 +175,12 @@ class _PersonalGradesScreenState extends State<PersonalGradesScreen> {
                                   color: index % 2 == 0 ? Colors.grey : Colors.white,
                                 ),
                                 child: CustomListTile(
-                                  title: Text(subject.name,
-                                    style: theme.textTheme.titleSmall!.copyWith(
-                                      color: index % 2 == 0 ? Colors.white : Colors.black,
+                                  title: SizedBox(
+                                    width: MediaQuery.of(context).size.width * 0.5,
+                                    child: Text(subject.name,
+                                      style: theme.textTheme.titleSmall!.copyWith(
+                                        color: index % 2 == 0 ? Colors.white : Colors.black,
+                                      ),
                                     ),
                                   ),
                                   subtitle: Text("Unit No. ${subject.units}",

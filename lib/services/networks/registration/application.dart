@@ -701,9 +701,47 @@ class Application extends ChangeNotifier {
           }
         }
 
+        if (isSenior) {
+          // For stem
+          if (strand!.id == 1) {
+            if (semester!.id == 0) {
+              for (Subject subject in Commons.stemFirstSubjectList) {
+                subjectsCollection.doc(subject.id.toString()).set(subject.toMap());
+              }
+            } else {
+              for (Subject subject in Commons.stemSecondSubjectList) {
+                subjectsCollection.doc(subject.id.toString()).set(subject.toMap());
+              }
+            }
+          }
+          // For gas
+          else if (strand!.id == 0) {
+            if (semester!.id == 0) {
+              for (Subject subject in Commons.gasFirstSubjectList) {
+                subjectsCollection.doc(subject.id.toString()).set(subject.toMap());
+              }
+            } else {
+              for (Subject subject in Commons.gasSecondSubjectList) {
+                subjectsCollection.doc(subject.id.toString()).set(subject.toMap());
+              }
+            }
+          }
+          // For humms
+          else if (strand!.id == 2) {
+            if (semester!.id == 0) {
+              for (Subject subject in Commons.hummsFirstSubjectList) {
+                subjectsCollection.doc(subject.id.toString()).set(subject.toMap());
+              }
+            } else {
+              for (Subject subject in Commons.hummsSecondSubjectList) {
+                subjectsCollection.doc(subject.id.toString()).set(subject.toMap());
+              }
+            }
+          }
+        }
       });
 
-      // clearForm();
+      clearForm();
       showHUD(false);
 
     } catch (e) {

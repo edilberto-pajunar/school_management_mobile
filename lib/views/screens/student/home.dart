@@ -4,6 +4,7 @@ import 'package:school_management/models/student/student.dart';
 import 'package:school_management/services/networks/navigation.dart';
 import 'package:school_management/services/networks/student/db.dart';
 import 'package:school_management/values/strings/colors.dart';
+import 'package:school_management/values/strings/images.dart';
 import 'package:school_management/views/screens/student/grades.dart';
 import 'package:school_management/views/widgets/body/stream_wrapper.dart';
 import 'package:school_management/views/widgets/buttons/primary.dart';
@@ -131,8 +132,12 @@ class _PersonalHomeScreenState extends State<PersonalHomeScreen> {
                           studentDB.uploadFileFirebase();
                         });
                       },
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 30,
+                        backgroundColor: Colors.white,
+                        child: Image.asset(PngImages.user,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                     title: Text(student.name,
@@ -140,9 +145,12 @@ class _PersonalHomeScreenState extends State<PersonalHomeScreen> {
                         color: Colors.white,
                       ),
                     ),
-                    subtitle: Text("${student.grade}-${student.section}",
-                      style: theme.textTheme.bodyMedium!.copyWith(
-                        color: Colors.white,
+                    subtitle: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Text("${student.grade} - ${student.section}",
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:school_management/models/student/new_subject.dart';
 import 'package:school_management/services/networks/student/db.dart';
 import 'package:school_management/views/widgets/body/stream_wrapper.dart';
-import 'package:school_management/views/widgets/buttons/primary.dart';
+import 'package:school_management/views/widgets/buttons/secondary.dart';
 
 class StudentEnrollmentScreen extends StatefulWidget {
   const StudentEnrollmentScreen({super.key});
@@ -45,7 +45,7 @@ class _StudentEnrollmentScreenState extends State<StudentEnrollmentScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   DataTable(
-                    dataRowMinHeight: 80.0,
+                    dataRowMaxHeight: 80,
                     columns: const [
                       DataColumn(
                         label: Text("Subject"),
@@ -59,7 +59,7 @@ class _StudentEnrollmentScreenState extends State<StudentEnrollmentScreen> {
                         cells: [
                           DataCell(Text(e.name)),
                           DataCell(
-                            PrimaryButton(
+                            SecondaryButton(
                               isEnabled: !e.enrolled,
                               onPressed: () {
                                 db.updateSubjectEnrollment(context, e.id.toString());

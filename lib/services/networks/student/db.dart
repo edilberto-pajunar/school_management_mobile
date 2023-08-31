@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +14,13 @@ import 'package:school_management/models/student/student.dart';
 import 'package:school_management/models/student/subject.dart';
 import 'package:school_management/services/networks/auth/auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:school_management/services/networks/navigation.dart';
 import 'package:school_management/values/strings/api/key.dart';
+import 'package:school_management/views/widgets/buttons/primary.dart';
 
 class StudentDB extends ChangeNotifier {
+
+  final NavigationServices nav = NavigationServices();
   
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
@@ -48,7 +51,7 @@ class StudentDB extends ChangeNotifier {
 
       final fullName = "${data["personalInfo"]["firstName"]} ${data["personalInfo"]["lastName"]}";
       final grade = "${data["schoolInfo"]["gradeToEnroll"]}";
-      final id = firebaseAuth.currentUser!.uid;
+      final id = "${data["id"]}";
       final controlNumber = data["controlNumber"];
       final lrn = "${data["personalInfo"]["lrn"]}";
       final password = data["password"];
@@ -86,9 +89,10 @@ class StudentDB extends ChangeNotifier {
   StudentModel _studentFromSnapshots(DocumentSnapshot snapshot) {
     final Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
-    final fullName = "${data["personalInfo"]["firstName"]}${data["personalInfo"]["lastName"]}";
+    final fullName = "${data["personalInfo"]["firstName"]} ${data["personalInfo"]["lastName"]}";
     final grade = "${data["schoolInfo"]["gradeToEnroll"]}";
     final id = firebaseAuth.currentUser!.uid;
+    final String? strand = "${data["schoolInfo"]["strand"]}";
     final controlNumber = data["controlNumber"];
     final lrn = "${data["personalInfo"]["lrn"]}";
 
@@ -96,7 +100,7 @@ class StudentDB extends ChangeNotifier {
         name: fullName,
         grade: grade,
         id: id,
-        section: "A",
+        section: strand ?? "A",
         controlNumber: controlNumber,
         lrn: lrn,
     );
@@ -224,6 +228,39 @@ class StudentDB extends ChangeNotifier {
           print("Generated subjects!");
     });
   }
+
+  Future<void> deleteStudent(BuildContext context, {
+    required String id,
+    required GlobalKey key,
+  }) async {
+
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        content: Text("Are you sure you want to delete?"),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              debugPrint("Deleting Student: $id");
+              await db.collection("students")
+                  .doc(id)
+                  .delete();
+              nav.pop(context);
+            },
+            child: const Text("Yes"),
+          ),
+          PrimaryButton(
+            onPressed: () {
+              nav.pop(context);
+            },
+            label: "No",
+          ),
+        ],
+      );
+    });
+
+
+  }
+
 
   Future<Map<String, dynamic>> createPayment() async {
     try {
